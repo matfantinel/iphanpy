@@ -24,6 +24,7 @@ import {
   storeCredentialApplication,
 } from '../utils/store-utils';
 import useTitle from '../utils/useTitle';
+import { Browser } from '@capacitor/browser';
 
 const { PHANPY_DEFAULT_INSTANCE: DEFAULT_INSTANCE } = import.meta.env;
 
@@ -116,18 +117,20 @@ function Login() {
               client_id,
               forceLogin,
             });
-            store.sessionCookie.set('codeVerifier', verifier);
-            location.href = url;
+            // Use store.local instead of sessionCookie for native app compatibility
+            store.local.set('codeVerifier', verifier);
+            await Browser.open({ url, presentationStyle: 'popover' });
           } else {
             alert(t`Failed to register application`);
           }
         } else {
           if (client_id && client_secret) {
-            location.href = await getAuthorizationURL({
+            const url = await getAuthorizationURL({
               instanceURL,
               client_id,
               forceLogin,
             });
+            await Browser.open({ url, presentationStyle: 'popover' });
           } else {
             alert(t`Failed to register application`);
           }

@@ -1,4 +1,5 @@
 import { generateCodeChallenge, verifier } from './oauth-pkce';
+import { Capacitor } from '@capacitor/core';
 
 const {
   DEV,
@@ -16,12 +17,17 @@ const SCOPES = 'read write follow push';
   We only use PHANPY_WEBSITE if it's "same" as current location URL.
   
   Very basic check based on location.hostname for now
+  
+  For Capacitor apps, we need to use the custom URL scheme for OAuth redirects
 */
+const isNative = Capacitor.isNativePlatform();
 const sameSite = WEBSITE
   ? WEBSITE.toLowerCase().includes(location.hostname)
   : false;
 const currentLocation = location.origin + location.pathname;
-const REDIRECT_URI = DEV || !sameSite ? currentLocation : WEBSITE;
+const REDIRECT_URI = isNative 
+  ? `${location.protocol}//${location.host}/`
+  : (DEV || !sameSite ? currentLocation : WEBSITE);
 
 export async function registerApplication({ instanceURL }) {
   const registrationParams = new URLSearchParams({

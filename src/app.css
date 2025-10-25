@@ -151,16 +151,18 @@ a[href^='http'][rel*='nofollow']:visited:not(:has(div)) {
   user-select: none;
 }
 .deck > header .header-grid {
-  background-color: var(--bg-color);
-  /* background-color: var(--bg-blur-color);
+  /* background-color: var(--bg-color); */
+  background-color: var(--bg-blur-color);
   background-image: linear-gradient(to bottom, var(--bg-color), transparent);
-  backdrop-filter: saturate(180%) blur(20px); */
+  backdrop-filter: saturate(180%) blur(20px);
   border-bottom: var(--hairline-width) solid var(--divider-color);
   min-height: 3em;
   display: grid;
   grid-template-columns: 1fr minmax(0, max-content) 1fr;
   align-items: center;
   white-space: nowrap;
+
+  padding-top: env(safe-area-inset-top);
 }
 .deck > header .header-grid > .header-side:last-of-type {
   text-align: end;

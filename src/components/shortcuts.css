@@ -74,12 +74,13 @@ body.exp-tab-bar-v2 {
   left: 0;
   right: 0;
   z-index: 100;
-  background-color: var(--bg-color);
-  /* background-color: var(--bg-blur-color);
+  /* background-color: var(--bg-color);
+  background-color: var(--bg-blur-color);
   backdrop-filter: blur(16px) saturate(3); */
-  border-top: var(--hairline-width) solid var(--outline-color);
-  box-shadow: 0 -8px 16px -8px var(--drop-shadow-color);
-  overflow: auto;
+  background: transparent;
+  /* border-top: var(--hairline-width) solid var(--outline-color);
+  box-shadow: 0 -8px 16px -8px var(--drop-shadow-color); */
+  /* overflow: auto; */
   transition: all 0.3s ease-in-out;
   padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom)
     env(safe-area-inset-left);
@@ -131,16 +132,24 @@ body.exp-tab-bar-v2 {
   display: flex;
   margin: 0;
   padding: 0;
+
+  background-color: var(--bg-blur-color);
+  backdrop-filter: blur(16px) saturate(3);
+  box-shadow: 0 -8px 16px -8px var(--drop-shadow-color);
+  border-radius: 30px;
+  width: fit-content;
+  margin-inline: auto;
 }
 #shortcuts .tab-bar li {
-  flex-grow: 1;
+  /* flex-grow: 1; */
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   justify-content: center;
-  min-width: 20vw;
-  flex-basis: 20vw;
+  /* min-width: 20vw;
+  flex-basis: 20vw; */
+  min-width: 80px;
 
   body.exp-tab-bar-v2 & {
     @media (orientation: landscape) {
@@ -169,6 +178,11 @@ body.exp-tab-bar-v2 {
   text-decoration: none;
   text-shadow: 0 var(--hairline-width) var(--bg-color);
   width: 100%;
+
+  width: 60px;
+  height: 60px;
+  padding: 8px;
+  justify-content: center;
 
   body.exp-tab-bar-v2 & {
     min-height: 56px;
@@ -222,6 +236,7 @@ body.exp-tab-bar-v2 {
     transition: all 0.1s ease-in-out;
     inset: 2px;
     background-color: var(--bg-faded-color);
+    border-radius: 50%;
   }
 
   body.exp-tab-bar-v2 &:before {

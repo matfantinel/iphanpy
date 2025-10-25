@@ -10,11 +10,14 @@ import {
   useRef,
   useState,
 } from 'preact/hooks';
-import { matchPath, Route, Routes, useLocation } from 'react-router-dom';
+import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import 'swiped-events';
 
 import { subscribe } from 'valtio';
+import { App as CapacitorApp } from '@capacitor/app';
+import { Browser } from '@capacitor/browser';
+import { Capacitor } from '@capacitor/core';
 
 import BackgroundService from './components/background-service';
 import ComposeButton from './components/compose-button';
@@ -60,6 +63,7 @@ import {
 } from './utils/api';
 import { getAccessToken } from './utils/auth';
 import focusDeck from './utils/focus-deck';
+import { setupLinkInterceptor } from './utils/open-link';
 import states, { initStates, statusKey } from './utils/states';
 import store from './utils/store';
 import {
@@ -372,44 +376,51 @@ if (import.meta.env.DEV) {
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [uiState, setUIState] = useState('loading');
+  const navigate = useNavigate();
   __BENCHMARK.start('app-init');
   __BENCHMARK.start('time-to-following');
   __BENCHMARK.start('time-to-home');
   __BENCHMARK.start('time-to-isLoggedIn');
-  useLingui();
+  useLingui();  
 
-  useEffect(() => {
+  // Define handleOAuthCode at component level so it can be used by both effects
+  const handleOAuthCode = (code) => {
+    if (!code) return;
+    
     const instanceURL = store.local.get('instanceURL');
-    const code = decodeURIComponent(
-      (window.location.search.match(/code=([^&]+)/) || [, ''])[1],
-    );
-
-    if (code) {
-      console.log({ code });
-      // Clear the code from the URL
+    
+    // Clear the code from the URL (only if it's in the URL)
+    if (window.location.search.includes('code=')) {
       window.history.replaceState(
         {},
         document.title,
         window.location.pathname || '/',
       );
+    }
 
-      const {
-        client_id: clientID,
-        client_secret: clientSecret,
-        vapid_key,
-      } = getCredentialApplication(instanceURL) || {};
-      const vapidKey = getVapidKey(instanceURL) || vapid_key;
-      const verifier = store.sessionCookie.get('codeVerifier');
+    const credentialApp = getCredentialApplication(instanceURL);
+    
+    const {
+      client_id: clientID,
+      client_secret: clientSecret,
+      vapid_key,
+    } = credentialApp || {};
+    const vapidKey = getVapidKey(instanceURL) || vapid_key;
+    // Use store.local instead of sessionCookie for native app compatibility
+    const verifier = store.local.get('codeVerifier');
 
-      (async () => {
+    (async () => {
+      try {
         setUIState('loading');
-        const { access_token: accessToken } = await getAccessToken({
+        const tokenResponse = await getAccessToken({
           instanceURL,
           client_id: clientID,
           client_secret: clientSecret,
           code,
           code_verifier: verifier || undefined,
         });
+        
+        const { access_token: accessToken } = tokenResponse;
 
         if (accessToken) {
           const client = initClient({ instance: instanceURL, accessToken });
@@ -421,70 +432,133 @@ function App() {
           initStates();
           window.__IGNORE_GET_ACCOUNT_ERROR__ = true;
 
+          // Clean up the code verifier after successful login
+          store.local.del('codeVerifier');
+          
           setIsLoggedIn(true);
           setUIState('default');
+          
+          // For native apps, reload the entire app to ensure clean state
+          // For web, navigate to home page
+          if (Capacitor.isNativePlatform()) {
+            window.location.href = '/';
+          } else {
+            navigate('/');
+          }
         } else {
+          console.error('No access token in response');
           setUIState('error');
         }
         __BENCHMARK.end('app-init');
-      })();
-    } else {
-      window.__IGNORE_GET_ACCOUNT_ERROR__ = true;
-      const searchAccount = decodeURIComponent(
-        (window.location.search.match(/account=([^&]+)/) || [, ''])[1],
-      );
-      let account;
-      if (searchAccount) {
-        account = getAccount(searchAccount);
-        console.log('searchAccount', searchAccount, account);
-        if (account) {
-          setCurrentAccountID(account.info.id);
-          window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname || '/',
-          );
-        }
+      } catch (error) {
+        console.error('Error in handleOAuthCode:', error);
+        setUIState('error');
       }
-      if (!account) {
-        account = getCurrentAccount();
+    })();
+  };
+
+  // Set up deep link listener for native apps (runs once on mount)
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    
+    const appUrlListener = CapacitorApp.addListener('appUrlOpen', async (event) => {
+      console.log('App opened with URL:', event.url);
+      
+      // Close the browser overlay
+      try {
+        await Browser.close();
+      } catch (e) {
+        console.error('Error closing browser:', e);
       }
+      
+      const url = new URL(event.url);
+      const code = url.searchParams.get('code');
+      if (code) {
+        handleOAuthCode(code);
+      }
+    });
+    
+    console.log('appUrlOpen listener set up');
+    
+    // Cleanup listener on unmount
+    return () => {
+      console.log('Removing appUrlOpen listener');
+      appUrlListener.remove();
+    };
+  }, []);
+
+  // Set up link interceptor for in-app browser on native platforms
+  useEffect(() => {
+    setupLinkInterceptor();
+  }, []);
+
+  // Handle OAuth code from URL (web) on mount
+  useEffect(() => {
+    const code = decodeURIComponent(
+      (window.location.search.match(/code=([^&]+)/) || [, ''])[1],
+    );
+    
+    if (code) {
+      handleOAuthCode(code);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.__IGNORE_GET_ACCOUNT_ERROR__ = true;
+    const searchAccount = decodeURIComponent(
+      (window.location.search.match(/account=([^&]+)/) || [, ''])[1],
+    );
+    let account;
+    if (searchAccount) {
+      account = getAccount(searchAccount);
+      console.log('searchAccount', searchAccount, account);
       if (account) {
         setCurrentAccountID(account.info.id);
-        const { client } = api({ account });
-        const { instance } = client;
-        // console.log('masto', masto);
-        initStates();
-        setUIState('loading');
-        (async () => {
-          try {
-            if (hasPreferences() && hasInstance(instance)) {
-              // Non-blocking
-              initPreferences(client);
-              initInstance(client, instance);
-            } else {
-              await Promise.allSettled([
-                initPreferences(client),
-                initInstance(client, instance),
-              ]);
-            }
-          } catch (e) {
-          } finally {
-            setIsLoggedIn(true);
-            setUIState('default');
-            __BENCHMARK.end('app-init');
-          }
-        })();
-      } else {
-        setUIState('default');
-        __BENCHMARK.end('app-init');
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname || '/',
+        );
       }
+    }
+    if (!account) {
+      account = getCurrentAccount();
+    }
+    if (account) {
+      setCurrentAccountID(account.info.id);
+      const { client } = api({ account });
+      const { instance } = client;
+      // console.log('masto', masto);
+      initStates();
+      setUIState('loading');
+      (async () => {
+        try {
+          if (hasPreferences() && hasInstance(instance)) {
+            // Non-blocking
+            initPreferences(client);
+            initInstance(client, instance);
+          } else {
+            await Promise.allSettled([
+              initPreferences(client),
+              initInstance(client, instance),
+            ]);
+          }
+        } catch (e) {
+        } finally {
+          setIsLoggedIn(true);
+          setUIState('default');
+          __BENCHMARK.end('app-init');
+        }
+      })();
+    } else {
+      setUIState('default');
+      __BENCHMARK.end('app-init');
     }
 
     // Cleanup
     store.sessionCookie.del('clientID');
     store.sessionCookie.del('clientSecret');
-    store.sessionCookie.del('codeVerifier');
+    store.sessionCookie.del('codeVerifier');    
   }, []);
 
   let location = useLocation();

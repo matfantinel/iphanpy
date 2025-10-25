@@ -1,6 +1,5 @@
-const isMobileSafari =
-  /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-  /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Capacitor } from '@capacitor/core';
 
 function CameraCaptureInput({
   hidden,
@@ -8,12 +7,63 @@ function CameraCaptureInput({
   supportedMimeTypes,
   setMediaAttachments,
 }) {
-  // If not Mobile Safari, only apply image/*
-  // Chrome Android doesn't show the camera if image and video combined
-  // It also can't switch between photo and video mode like iOS/Safari
-  const filteredSupportedMimeTypes = isMobileSafari
-    ? supportedMimeTypes
-    : supportedMimeTypes?.filter((mimeType) => !/^image\//i.test(mimeType));
+  const isNative = Capacitor.isNativePlatform();
+
+  const handleCapture = async () => {
+    if (!isNative) {
+      // Fallback for web - use file input
+      return;
+    }
+
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera,
+      });
+
+      // Convert to blob for upload
+      const response = await fetch(image.webPath);
+      const blob = await response.blob();
+      const file = new File([blob], `photo_${Date.now()}.${image.format}`, {
+        type: `image/${image.format}`,
+      });
+
+      setMediaAttachments((attachments) => [
+        ...attachments,
+        {
+          file: file,
+          type: file.type,
+          size: file.size,
+          url: image.webPath,
+          id: null, // indicate uploaded state
+          description: null,
+        },
+      ]);
+    } catch (error) {
+      // User cancelled or permission denied
+      console.error('Camera error:', error);
+    }
+  };
+
+  // For native platforms, use a button trigger
+  if (isNative) {
+    return (
+      <button
+        type="button"
+        hidden={hidden}
+        disabled={disabled}
+        onClick={handleCapture}
+        style={{ display: 'none' }}
+      />
+    );
+  }
+
+  // Fallback for web - use file input
+  const filteredSupportedMimeTypes = supportedMimeTypes?.filter((mimeType) =>
+    /^image\//i.test(mimeType)
+  );
 
   return (
     <input
@@ -45,6 +95,10 @@ function CameraCaptureInput({
 }
 
 export const supportsCameraCapture = (() => {
+  // Check if running on native platform or web with capture support
+  if (Capacitor.isNativePlatform()) {
+    return true;
+  }
   const input = document.createElement('input');
   return 'capture' in input;
 })();
