@@ -1,8 +1,34 @@
 <div align="center">
   <img src="design/logo-4.svg" width="128" height="128" alt="">
 
-Phanpy
+(i)Phanpy
 ===
+
+This is a fork of [Phanpy](https://phanpy.social), with the goal of making it installable as an iOS app.
+
+It uses [Capacitor](https://capacitorjs.com/) to wrap the web app into a native app, and I did some tweaks to make it work on iOS. The tweaks so far are:
+
+- Custom icon, built based on the original SVG and edited with Icon Composer, supporting Liquid Glass styles;
+- Custom handling for instance authentication. This app listens for the "iphanpy://iphanpy" URL scheme to fetch the auth code;
+- Added custom code to invoke the device's camera, so it asks for the needed permissions first;
+- Intercepts all external links to open them in an in-app browser instead;
+
+This is just a side project and will not be published to the App Store. Which means some things:
+- **Notifications do not work, and likely never will.**
+- **You have to build the app yourself, through XCode, to be able to use it on your device.** Sorry, I can't even put it on TestFlight without paying the annual $99 fee, and that's a bit too much for me.
+
+
+## How to build/install
+
+1. Clone this repository, or download it as a zip file;
+2. Open the downloaded folder in a Terminal, and run `npm install`. NodeJS 20+ is required;
+3. Run `npm run build && npx cap sync ios` to build the app;
+4. Run `npx cap open ios` to open the project in XCode;
+5. Inside XCode, you can just choose to run the app on your iPhone (and probably iPad). After running it once, the app will remain installed, as far as I know there's no time limit!
+
+
+**Original README below**
+---
 
 **Minimalistic opinionated Mastodon web client.**
 </div>
