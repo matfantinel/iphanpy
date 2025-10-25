@@ -9,6 +9,8 @@ This is a fork of [Phanpy](https://phanpy.social), with the goal of making it in
 
 In my experience, it offers better performance and less glitches than the installed web app (PWA). I also did some minor tweaks to make it look *just a little bit* more like an iOS app (blurred header, floating shortcuts bottom bar, Liquid Glass icon).
 
+![App screenshot](readme-assets/app-screenshot.jpg)
+
 It uses [Capacitor](https://capacitorjs.com/) to wrap the web app into a native app, and I did some tweaks to make it work on iOS. The tweaks so far are:
 
 - Custom icon, built based on the original SVG and edited with Icon Composer, supporting Liquid Glass styles;
