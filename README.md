@@ -5,6 +5,7 @@
 ===
 
 This is a fork of [Phanpy](https://phanpy.social), with the goal of making it installable as an iOS app.
+</div>
 
 It uses [Capacitor](https://capacitorjs.com/) to wrap the web app into a native app, and I did some tweaks to make it work on iOS. The tweaks so far are:
 
@@ -31,7 +32,6 @@ This is just a side project and will not be published to the App Store. Which me
 ---
 
 **Minimalistic opinionated Mastodon web client.**
-</div>
 
 ![Fancy screenshot](readme-assets/fancy-screenshot.jpg)
 
