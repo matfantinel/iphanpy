@@ -36,6 +36,9 @@ export function setupLinkInterceptor() {
       const anchor = e.target.closest('a[href]');
       if (!anchor) return;
 
+      // Only intercept links with target="_blank"
+      if (anchor.getAttribute('target') !== '_blank') return;
+
       const href = anchor.getAttribute('href');
       if (!href) return;
 
