@@ -1,0 +1,12 @@
+{
+  "appId": "dev.fantinel.ios.phanpy",
+  "appName": "iPhanpy",
+  "webDir": "dist",
+  "server": {
+    "hostname": "iphanpy",
+    "iosScheme": "iphanpy"
+  },
+  "ios": {
+    "scheme": "iPhanpy"
+  }
+}

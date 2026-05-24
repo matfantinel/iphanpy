@@ -1,27 +1,15 @@
 import { generateCodeChallenge, verifier } from './oauth-pkce';
+import { getRedirectURI } from '../iphanpy-overrides/utils/auth-overrides';
 
 const {
-  DEV,
   PHANPY_CLIENT_NAME: CLIENT_NAME,
   PHANPY_WEBSITE: WEBSITE,
 } = import.meta.env;
 
-const SCOPES = 'read write follow push';
+const DEV = false;
 
-/*
-  PHANPY_WEBSITE is set to the default official site.
-  It's used in pre-built releases, so there's no way to change it dynamically
-  without rebuilding.
-  Therefore, we can't use it as redirect_uri.
-  We only use PHANPY_WEBSITE if it's "same" as current location URL.
-  
-  Very basic check based on location.hostname for now
-*/
-const sameSite = WEBSITE
-  ? WEBSITE.toLowerCase().includes(location.hostname)
-  : false;
-const currentLocation = location.origin + location.pathname;
-const REDIRECT_URI = DEV || !sameSite ? currentLocation : WEBSITE;
+const SCOPES = 'read write follow push';
+const REDIRECT_URI = getRedirectURI();
 
 export async function registerApplication({ instanceURL }) {
   const registrationParams = new URLSearchParams({

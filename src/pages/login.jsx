@@ -16,7 +16,6 @@ import {
   getPKCEAuthorizationURL,
   registerApplication,
 } from '../utils/auth';
-import { openAuthPopup, watchAuthPopup } from '../utils/auth-popup';
 import { supportsPKCE } from '../utils/oauth-pkce';
 import store from '../utils/store';
 import {
@@ -25,6 +24,8 @@ import {
   storeCredentialApplication,
 } from '../utils/store-utils';
 import useTitle from '../utils/useTitle';
+import { Browser } from '@capacitor/browser';
+import LocalNetwork from '../iphanpy-overrides/utils/LocalNetworkPlugin';
 
 const { PHANPY_DEFAULT_INSTANCE: DEFAULT_INSTANCE } = import.meta.env;
 
@@ -34,6 +35,7 @@ function Login() {
   const instanceURLRef = useRef();
   const cachedInstanceURL = store.local.get('instanceURL');
   const [uiState, setUIState] = useState('default');
+  const [errorMessage, setErrorMessage] = useState('');
   const [searchParams] = useSearchParams();
   const instance = searchParams.get('instance');
   const submit = searchParams.get('submit');
@@ -50,12 +52,26 @@ function Login() {
         const data = await res.json();
         setInstancesList(data);
         searcher.current = new Fuse(data);
+
+        await checkLocalNetworkPermission();
       } catch (e) {
         // Silently fail
         console.error(e);
       }
     })();
   }, []);
+
+  async function checkLocalNetworkPermission() {
+    try {
+      await LocalNetwork.requestPermission();
+      console.log('Permission requested');
+      
+      // Now make your local network request
+      // fetch('http://192.168.1.100:8080/api/endpoint')...
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
   // useEffect(() => {
   //   if (cachedInstanceURL) {
@@ -87,6 +103,7 @@ function Login() {
       } catch (e) {
         // Silently fail
         console.error(e);
+        await checkLocalNetworkPermission();
       }
 
       store.local.set('instanceURL', instanceURL);
@@ -119,7 +136,9 @@ function Login() {
               client_id,
               forceLogin,
             });
-            store.sessionCookie.set('codeVerifier', verifier);
+            // Use store.local instead of sessionCookie for native app compatibility
+            store.local.set('codeVerifier', verifier);
+            // await Browser.open({ url, presentationStyle: 'popover' });
             authUrl = url;
           } else {
             alert(t`Failed to register application`);
@@ -133,6 +152,7 @@ function Login() {
               client_id,
               forceLogin,
             });
+            // await Browser.open({ authUrl, presentationStyle: 'popover' });
           } else {
             alert(t`Failed to register application`);
             setUIState('default');
@@ -140,30 +160,44 @@ function Login() {
           }
         }
 
-        const popup = openAuthPopup(authUrl);
-
-        if (popup) {
-          watchAuthPopup(
-            popup,
-            (code) => {
-              const callbackUrl = `${window.location.origin}${window.location.pathname}?code=${encodeURIComponent(code)}`;
-              window.location.href = callbackUrl;
-            },
-            (error) => {
-              console.error('Popup auth error:', error);
-              setUIState('error');
-            },
-          );
-        } else {
-          // Popup blocked, fallback to redirect
-          console.log('Popup blocked, falling back to redirect');
-          location.href = authUrl;
+        if (authUrl) {
+          try {
+            await Browser.open({ url: authUrl, presentationStyle: 'popover' });
+            setUIState('default');
+          } catch (e) {
+            setUIState('error');
+            setErrorMessage('Failed to open browser: ' + JSON.stringify(e));
+          }
         }
 
-        setUIState('default');
+        // On iOS, we don't want popup, because Apple doesn't like when we open the browser
+        // const popup = openAuthPopup(authUrl);
+
+        // if (popup) {
+        //   watchAuthPopup(
+        //     popup,
+        //     (code) => {
+        //       const callbackUrl = `${window.location.origin}${window.location.pathname}?code=${encodeURIComponent(code)}`;
+        //       window.location.href = callbackUrl;
+        //     },
+        //     (error) => {
+        //       console.error('Popup auth error:', error);
+        //       setUIState('error');
+        //       setErrorMessage('Popup auth error: ' + error);
+        //     },
+        //   );
+        // } else {
+        //   // Popup blocked, fallback to redirect
+        //   console.log('Popup blocked, falling back to redirect');
+        //   location.href = authUrl;
+        // }
+
+        // setUIState('default');
       } catch (e) {
         console.error(e);
-        setUIState('error');
+        setErrorMessage('Generic error: ' + e);
+        setUIState('error');       
+        await checkLocalNetworkPermission(); 
       }
     })();
   };
@@ -282,6 +316,7 @@ function Login() {
             <Trans>
               Failed to log in. Please try again or try another server.
             </Trans>
+            {errorMessage}
           </p>
         )}
         <div>
