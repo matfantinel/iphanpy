@@ -1,5 +1,5 @@
 PODS:
-  - Capacitor (7.6.1):
+  - Capacitor (7.6.5):
     - CapacitorCordova
   - CapacitorApp (7.1.2):
     - Capacitor
@@ -7,7 +7,7 @@ PODS:
     - Capacitor
   - CapacitorCamera (7.0.5):
     - Capacitor
-  - CapacitorCordova (7.6.1)
+  - CapacitorCordova (7.6.5)
   - CapacitorStatusBar (7.0.6):
     - Capacitor
 
@@ -34,11 +34,11 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
 
 SPEC CHECKSUMS:
-  Capacitor: b8dd0e1151c953171b0e02d04aa57f3389edcd97
+  Capacitor: e9708b186e71dc45f9b2ee72e826b7389fb79ff2
   CapacitorApp: f01a913211780e0718dae9750442c3e23f96e106
   CapacitorBrowser: 6d09f59655e89aede71654ef08b98de55cf032b6
   CapacitorCamera: 9e952270be355797f769aa835bb7643a96c871fe
-  CapacitorCordova: 6ab7337f25a2c9ce7a3fdc2f249c480f447853e0
+  CapacitorCordova: 2b36392a7292c3c451dcae154185ee8804d7b6b3
   CapacitorStatusBar: 416e9e53fd6397e668d4a181cd2131617d949bd6
 
 PODFILE CHECKSUM: bddd825d80162884533ffa47bebf7849c8b84df2
