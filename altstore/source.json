@@ -26,6 +26,14 @@
       ],
       "versions": [
         {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/6242c290-09b0-4a21-8c01-5ab1ea8ab982/manifest.json",
+          "size": 7500000,
+          "version": "1.5.5",
+          "buildVersion": "15",
+          "date": "2026-05-25T12:00:00+01:00",
+          "localizedDescription": "All the latest Phanpy updates:\n\n- Enable/disable auto-hiding of top and bottom bars as you scroll\n\n- Experimental paginated timeline\n\n- Multi-filters for profile posts\n\n- Wellbeing: hide trending, local or federated timelines\n\n- Bug fixes"
+        },
+        {
           "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/5e5fb699-1ec4-4bc4-9799-f91469287aee/manifest.json",
           "size": 7500000,
           "version": "1.5.4",
