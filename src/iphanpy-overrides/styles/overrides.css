@@ -1,0 +1,7 @@
+.deck > header .header-grid {
+  background-color: var(--bg-blur-color);
+  background-image: linear-gradient(to bottom, var(--bg-color), transparent);
+  backdrop-filter: saturate(180%) blur(20px);
+
+  padding-top: env(safe-area-inset-top);
+}

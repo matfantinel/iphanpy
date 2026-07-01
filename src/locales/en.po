@@ -2578,7 +2578,7 @@ msgstr ""
 #: src/components/shortcuts-settings.jsx:78
 #: src/components/shortcuts-settings.jsx:87
 #: src/components/shortcuts-settings.jsx:125
-#: src/pages/login.jsx:231
+#: src/pages/login.jsx:265
 msgid "Server"
 msgstr "Server"
 
@@ -4133,32 +4133,32 @@ msgstr ""
 msgid "No lists yet."
 msgstr ""
 
-#: src/pages/login.jsx:125
-#: src/pages/login.jsx:137
+#: src/pages/login.jsx:144
+#: src/pages/login.jsx:157
 msgid "Failed to register application"
 msgstr "Failed to register application"
 
-#: src/pages/login.jsx:246
+#: src/pages/login.jsx:280
 msgid "server domain"
 msgstr "server domain"
 
-#: src/pages/login.jsx:271
+#: src/pages/login.jsx:305
 msgid "e.g. “mastodon.social”"
 msgstr ""
 
-#: src/pages/login.jsx:282
+#: src/pages/login.jsx:316
 msgid "Failed to log in. Please try again or try another server."
 msgstr "Failed to log in. Please try again or try another server."
 
-#: src/pages/login.jsx:294
+#: src/pages/login.jsx:329
 msgid "Continue with {selectedInstanceText}"
 msgstr ""
 
-#: src/pages/login.jsx:295
+#: src/pages/login.jsx:330
 msgid "Continue"
 msgstr ""
 
-#: src/pages/login.jsx:303
+#: src/pages/login.jsx:338
 msgid "Don't have an account? Create one!"
 msgstr ""
 

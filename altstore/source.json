@@ -1,0 +1,84 @@
+{
+  "name": "iPhanpy",
+  "subtitle": "The best Mastodon client out there - now as an iOS app!",
+  "description": "iPhanpy brings everything that Phanpy has, but runs smoother, stays longer in memory, and has a neat Liquid Glass icon! I am not the original developer of Phanpy, so all props go to Chee Aun. I merely adapted the original web app into a version that is installable as a “native” iOS app - it faces way less performance restrictions compared to running on the browser.",
+  "iconURL": "https://i.imgur.com/AAsffEA.png",
+  "website": "https://fantinel.dev/blog/iphanpy-mastodon-client/",
+  "tintColor": "#B2CDFD",
+  "featuredApps": ["dev.fantinel.ios.phanpy"],
+  "headerURL": "https://fantinel.dev/cms/optimized-media/articles/iphanpy-mastodon-client.png",
+  "fediUsername": "fantinel",
+  "apps": [
+    {
+      "name": "iPhanpy",
+      "bundleIdentifier": "dev.fantinel.ios.phanpy",
+      "marketplaceID": "6755365082",
+      "developerName": "Matt Fantinel",
+      "subtitle": "The best Mastodon client out there - now as an iOS app!",
+      "localizedDescription": "iPhanpy brings everything that Phanpy has, but runs smoother, stays longer in memory, and has a neat Liquid Glass icon! I am not the original developer of Phanpy, so all props go to Chee Aun. I merely adapted the original web app into a version that is installable as a “native” iOS app - it faces way less performance restrictions compared to running on the browser.",
+      "iconURL": "https://i.imgur.com/AAsffEA.png",
+      "tintColor": "#B2CDFD",
+      "category": "social",
+      "screenshots": [
+        "https://i.imgur.com/BCXM3t3.png",
+        "https://i.imgur.com/V22HX5d.png",
+        "https://i.imgur.com/pMze1vP.png"
+      ],
+      "versions": [
+        {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/6242c290-09b0-4a21-8c01-5ab1ea8ab982/manifest.json",
+          "size": 7500000,
+          "version": "1.5.5",
+          "buildVersion": "15",
+          "date": "2026-05-25T12:00:00+01:00",
+          "localizedDescription": "All the latest Phanpy updates:\n\n- Enable/disable auto-hiding of top and bottom bars as you scroll\n\n- Experimental paginated timeline\n\n- Multi-filters for profile posts\n\n- Wellbeing: hide trending, local or federated timelines\n\n- Bug fixes"
+        },
+        {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/5e5fb699-1ec4-4bc4-9799-f91469287aee/manifest.json",
+          "size": 7500000,
+          "version": "1.5.4",
+          "buildVersion": "14",
+          "date": "2026-04-01T16:00:00+01:00",
+          "localizedDescription": "- All the latest Phanpy updates;\n\n- Tapping on the status bar will now scroll the feed to the top;\n\n- Support local-hosted instances (will ask for Local Network permission if needed);\n\n\n\nThe latest Phanpy updates include:\n\n- Timeline access controls\n\n- New shortcut: \"Profile\"\n\n- \"Only followings\" filter for Mentions\n\n- And, of course, bug fixes!"
+        },
+        {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/3502fd76-9a12-4b4f-8d00-846d27c5f146/manifest.json",
+          "size": 7500000,
+          "version": "1.5.2",
+          "buildVersion": "9",
+          "date": "2025-02-02T12:00:00+01:00"
+        },
+        {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/4f7f26af-bed2-495f-b391-7398f7339651/manifest.json",
+          "size": 7500000,
+          "version": "1.5.1",
+          "buildVersion": "7",
+          "date": "2025-01-31T21:30:00+01:00"
+        },
+        {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/9d9d5b73-e904-4ddf-822d-664c343484d0/manifest.json",
+          "size": 7500000,
+          "version": "1.5.0",
+          "buildVersion": "6",
+          "date": "2025-01-31T14:30:00+01:00"
+        },
+        {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/eb4da1ed-538e-4b26-a7c9-6d522b7a1dcb/manifest.json",
+          "size": 7500000,
+          "version": "1.4",
+          "buildVersion": "5",
+          "date": "2025-12-14T20:30:00+01:00"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {
+          "NSCameraUsageDescription": "This app needs access to the camera to take photos for posts.",
+          "NSPhotoLibraryAddUsageDescription": "This app needs permission to save photos to your photo library.",
+          "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to select photos for posts."
+        }
+      }
+    }
+  ],
+  "news": []
+}
