@@ -43,9 +43,10 @@ export function setupLinkInterceptor() {
         'is-quote', // quote posts, links to other posts
         'mention', // mentions, hashtags
         'hashtag', // hashtags
+        'collection-card', // collection cards
       ];
 
-      // Do NOT intercept links that have "is-quote" class
+      // Do NOT intercept links that have any of the ignored classes
       if (ignoredClasses.some((cls) => anchor.classList.contains(cls))) return;
 
       const href = anchor.getAttribute('href');
