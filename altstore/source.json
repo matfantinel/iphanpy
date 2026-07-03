@@ -26,6 +26,14 @@
       ],
       "versions": [
         {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/22442afd-cff5-4223-85df-0588f415f76e/manifest.json",
+          "size": 7500000,
+          "version": "1.5.6",
+          "buildVersion": "16",
+          "date": "2026-07-03T12:00:00+01:00",
+          "localizedDescription": "Support for Mastodon Collections"
+        },
+        {
           "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/6242c290-09b0-4a21-8c01-5ab1ea8ab982/manifest.json",
           "size": 7500000,
           "version": "1.5.5",
