@@ -3,19 +3,24 @@
     {
       "value" : {
         "linear-gradient" : [
-          "display-p3:0.84681,0.89787,1.00000,1.00000",
-          "display-p3:0.71765,0.80392,0.97647,1.00000"
-        ]
+          "display-p3:0.86140,0.90800,0.99331,1.00000",
+          "display-p3:0.71043,0.79465,0.98088,1.00000"
+        ],
+        "orientation" : {
+          "start" : {
+            "x" : 0.5,
+            "y" : 1
+          },
+          "stop" : {
+            "x" : 0.5,
+            "y" : 0.3
+          }
+        }
       }
     },
     {
       "appearance" : "dark",
-      "value" : {
-        "linear-gradient" : [
-          "display-p3:0.27364,0.35517,0.55181,1.00000",
-          "display-p3:0.10838,0.19331,0.39815,1.00000"
-        ]
-      }
+      "value" : "system-dark"
     }
   ],
   "groups" : [
@@ -23,8 +28,27 @@
       "blur-material" : null,
       "layers" : [
         {
-          "image-name" : "p3.svg",
-          "name" : "p3",
+          "blend-mode-specializations" : [
+            {
+              "value" : "multiply"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : "plus-darker"
+            }
+          ],
+          "glass-specializations" : [
+            {
+              "value" : true
+            },
+            {
+              "appearance" : "tinted",
+              "value" : true
+            }
+          ],
+          "hidden" : false,
+          "image-name" : "p2.svg",
+          "name" : "p2",
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
@@ -34,9 +58,10 @@
           }
         },
         {
-          "glass" : true,
-          "image-name" : "p2.svg",
-          "name" : "p2",
+          "blend-mode" : "multiply",
+          "glass" : false,
+          "image-name" : "p3.svg",
+          "name" : "p3",
           "position" : {
             "scale" : 1,
             "translation-in-points" : [
@@ -66,8 +91,34 @@
     {
       "blend-mode" : "normal",
       "blur-material" : null,
+      "hidden" : false,
       "layers" : [
         {
+          "fill" : {
+            "linear-gradient" : [
+              "display-p3:0.55795,0.65524,0.90000,1.00000",
+              "display-p3:0.50090,0.63473,0.97139,1.00000"
+            ],
+            "orientation" : {
+              "start" : {
+                "x" : 0.13674390967165279,
+                "y" : 0
+              },
+              "stop" : {
+                "x" : 0.8956190107162885,
+                "y" : 1
+              }
+            }
+          },
+          "glass-specializations" : [
+            {
+              "value" : true
+            },
+            {
+              "appearance" : "dark",
+              "value" : true
+            }
+          ],
           "image-name" : "p1.svg",
           "name" : "p1",
           "position" : {
