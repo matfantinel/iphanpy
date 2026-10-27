@@ -20,6 +20,7 @@
 		C9CA805B2F41FAF700DCDD1C /* LocalNetworkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = C9CA805A2F41FAF700DCDD1C /* LocalNetworkPlugin.m */; };
 		C9EB10432EB7993300C4D760 /* Phanpy.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9EB10422EB7993300C4D760 /* Phanpy.icon */; };
 		C9EB10452EB7A03D00C4D760 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB10442EB7A03300C4D760 /* MyViewController.swift */; };
+		C9F5A0022F9B000100C4D760 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5A0012F9B000100C4D760 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		C9EB103F2EB795E900C4D760 /* iPhanpy icon 2.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "iPhanpy icon 2.icon"; sourceTree = "<group>"; };
 		C9EB10422EB7993300C4D760 /* Phanpy.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Phanpy.icon; sourceTree = "<group>"; };
 		C9EB10442EB7A03300C4D760 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
+		C9F5A0012F9B000100C4D760 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +92,7 @@
 				C9EB10442EB7A03300C4D760 /* MyViewController.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				C9F5A0012F9B000100C4D760 /* SceneDelegate.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -233,6 +236,7 @@
 				C9CA80572F41F95700DCDD1C /* LocalNetworkPlugin.swift in Sources */,
 				C9CA805B2F41FAF700DCDD1C /* LocalNetworkPlugin.m in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				C9F5A0022F9B000100C4D760 /* SceneDelegate.swift in Sources */,
 				C9CA80552F41F84600DCDD1C /* LocalNetworkAuthorization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -307,7 +311,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -358,7 +362,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -373,12 +377,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = Phanpy;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 237MAM8CHG;
 				INFOPLIST_FILE = App/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.5.7;
+				MARKETING_VERSION = 1.6.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.fantinel.ios.phanpy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -395,12 +399,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = Phanpy;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 237MAM8CHG;
 				INFOPLIST_FILE = App/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.5.7;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.fantinel.ios.phanpy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";

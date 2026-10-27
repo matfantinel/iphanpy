@@ -26,12 +26,12 @@
     "postinstall": "npx exifreader build"
   },
   "dependencies": {
-    "@capacitor/app": "^7.1.0",
-    "@capacitor/browser": "^7.0.2",
-    "@capacitor/camera": "^7.0.2",
-    "@capacitor/core": "^7.4.4",
-    "@capacitor/ios": "^7.4.4",
-    "@capacitor/status-bar": "^7.0.6",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/camera": "^8.2.6",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/status-bar": "^8.0.4",
     "@formatjs/intl-localematcher": "~0.9.0",
     "@formatjs/intl-segmenter": "~12.2.15",
     "@formkit/auto-animate": "~0.10.0",
@@ -79,7 +79,7 @@
     "web-haptics": "~0.0.6"
   },
   "devDependencies": {
-    "@capacitor/cli": "^7.4.4",
+    "@capacitor/cli": "^8.5.3",
     "@emnapi/core": "~1.11.3",
     "@emnapi/runtime": "~1.11.3",
     "@lingui/cli": "~6.10.1",

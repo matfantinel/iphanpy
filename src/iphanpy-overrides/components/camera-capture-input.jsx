@@ -2,6 +2,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 
 function CameraCaptureInput({
+  ref,
   hidden,
   disabled = false,
   supportedMimeTypes,
@@ -51,6 +52,7 @@ function CameraCaptureInput({
   if (isNative) {
     return (
       <button
+        ref={ref}
         type="button"
         hidden={hidden}
         disabled={disabled}
@@ -67,6 +69,7 @@ function CameraCaptureInput({
 
   return (
     <input
+      ref={ref}
       type="file"
       hidden={hidden}
       accept={filteredSupportedMimeTypes?.join(',')}
