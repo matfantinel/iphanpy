@@ -33,15 +33,15 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>This app needs access to the camera to take photos for posts.</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>This app needs access to your Local Network to be able to access local-hosted instances.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_http._tcp</string>
 		<string>_https._tcp</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to the camera to take photos for posts.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app needs access to your Local Network to be able to access local-hosted instances.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app needs permission to save photos to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -68,6 +68,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>	
+	<true/>
 </dict>
 </plist>

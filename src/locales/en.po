@@ -1742,8 +1742,8 @@ msgid "Accounts…"
 msgstr ""
 
 #: src/components/nav-menu.jsx:346
-#: src/pages/login.jsx:33
-#: src/pages/login.jsx:227
+#: src/pages/login.jsx:34
+#: src/pages/login.jsx:261
 #: src/pages/status.jsx:1109
 #: src/pages/welcome.jsx:63
 msgid "Log in"
@@ -2635,7 +2635,7 @@ msgstr ""
 #: src/components/shortcuts-settings.jsx:81
 #: src/components/shortcuts-settings.jsx:90
 #: src/components/shortcuts-settings.jsx:128
-#: src/pages/login.jsx:231
+#: src/pages/login.jsx:265
 msgid "Server"
 msgstr "Server"
 
@@ -3378,7 +3378,7 @@ msgstr "Login required."
 #: src/compose.jsx:96
 #: src/pages/annual-report.jsx:186
 #: src/pages/http-route.jsx:94
-#: src/pages/login.jsx:309
+#: src/pages/login.jsx:344
 msgid "Go home"
 msgstr ""
 
@@ -4724,22 +4724,6 @@ msgstr ""
 
 #: src/pages/settings.jsx:932
 msgid "<0>Built</0> by <1>@cheeaun</1>"
-msgstr ""
-
-#: src/pages/settings.jsx:961
-msgid "Sponsor"
-msgstr ""
-
-#: src/pages/settings.jsx:969
-msgid "Donate"
-msgstr "Donate"
-
-#: src/pages/settings.jsx:985
-msgid "What's new"
-msgstr "What's new"
-
-#: src/pages/settings.jsx:989
-msgid "Privacy Policy"
 msgstr ""
 
 #. placeholder {0}: WEBSITE.replace(/https?:\/\//g, '').replace(/\/$/, '')
