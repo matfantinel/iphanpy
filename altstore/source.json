@@ -26,6 +26,14 @@
       ],
       "versions": [
         {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/02ecffee-4e6f-4fec-a403-2fc4cd282288/manifest.json",
+          "size": 7500000,
+          "version": "1.6.0",
+          "buildVersion": "18",
+          "date": "2026-10-27T12:00:00+01:00",
+          "localizedDescription": "This update brings you the latest and greatest from Phanpy, which includes:\n\n- New wellbeing features, like hiding post metrics and lowercasing post text\n- Visual improvements everywhere; from alt text badge to new heart/bookmark animations\n- Tons of bug fixes"
+        },
+        {
           "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/22442afd-cff5-4223-85df-0588f415f76e/manifest.json",
           "size": 7500000,
           "version": "1.5.6",

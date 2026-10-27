@@ -380,6 +380,7 @@
 				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 237MAM8CHG;
 				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.6.0;
@@ -402,6 +403,7 @@
 				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 237MAM8CHG;
 				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.6.0;
