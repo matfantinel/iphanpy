@@ -47,7 +47,7 @@ import AccountBlock from './account-block';
 // import Avatar from './avatar';
 import CameraCaptureInput, {
   supportsCameraCapture,
-} from './camera-capture-input';
+} from '../iphanpy-overrides/components/camera-capture-input';
 import CharCountMeter from './char-count-meter';
 import ComposePoll, { expiryOptions } from './compose-poll';
 import Textarea from './compose-textarea';

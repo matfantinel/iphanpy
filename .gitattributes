@@ -3,3 +3,9 @@ readme-assets/** linguist-documentation
 
 # Diff PO file, ignore line number changes, reduce diff noise
 src/locales/en.po diff=po-filter
+
+# Merge some files using ours strategy (i.e. always keep our version in case of conflict)
+package-lock.json merge=ours
+README.md merge=ours
+
+src/locales/en.po merge=theirs

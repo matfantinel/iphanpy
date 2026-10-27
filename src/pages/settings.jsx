@@ -952,7 +952,7 @@ function Settings({ onClose }) {
               </Trans>
             </div>
           </div>
-          <p>
+          {/* <p>
             <a
               href="https://github.com/sponsors/cheeaun"
               target="_blank"
@@ -988,7 +988,7 @@ function Settings({ onClose }) {
             <a href={PRIVACY_POLICY_URL} target="_blank" rel="noopener">
               <Trans>Privacy Policy</Trans>
             </a>
-          </p>
+          </p> */}
           {__COMMIT_TIME__ && (
             <p>
               {WEBSITE && (
