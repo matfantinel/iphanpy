@@ -24,7 +24,7 @@ import {
   storeCredentialApplication,
 } from '../utils/store-utils';
 import useTitle from '../utils/useTitle';
-import { Browser } from '@capacitor/browser';
+import { openAuthBrowser } from '../iphanpy-overrides/utils/auth-overrides';
 import LocalNetwork from '../iphanpy-overrides/utils/LocalNetworkPlugin';
 
 const { PHANPY_DEFAULT_INSTANCE: DEFAULT_INSTANCE } = import.meta.env;
@@ -162,7 +162,7 @@ function Login() {
 
         if (authUrl) {
           try {
-            await Browser.open({ url: authUrl, presentationStyle: 'popover' });
+            await openAuthBrowser(authUrl);
             setUIState('default');
           } catch (e) {
             setUIState('error');

@@ -26,6 +26,14 @@
       ],
       "versions": [
         {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/d5bac488-4859-476e-9771-38d379506f30/manifest.json",
+          "size": 7500000,
+          "version": "1.6.1",
+          "buildVersion": "20",
+          "date": "2026-11-06T12:00:00+01:00",
+          "localizedDescription": "iPhone Duo support and fix for age rating"
+        },
+        {
           "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/02ecffee-4e6f-4fec-a403-2fc4cd282288/manifest.json",
           "size": 7500000,
           "version": "1.6.0",

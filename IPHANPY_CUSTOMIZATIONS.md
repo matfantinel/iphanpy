@@ -16,7 +16,7 @@ src/iphanpy-overrides/
 ├── styles/
 │   └── overrides.css                   # UI customizations
 └── utils/
-    ├── auth-overrides.js               # OAuth redirect URI handling
+    ├── auth-overrides.js               # OAuth redirect URI + in-app auth browser
     ├── open-link.js                    # In-app browser link interceptor
     └── status-bar-scroll.js            # iOS status bar tap → scroll to top
 ```
@@ -37,9 +37,12 @@ The following upstream files import from `iphanpy-overrides/`:
 
 ### 3. `src/components/compose.jsx`
 - Imports camera component: `../iphanpy-overrides/components/camera-capture-input`
+- Upstream opens the camera via `cameraCaptureInputRef.current?.click()`, so the override component must accept a `ref` prop and forward it to the element it renders
 
 ### 4. `src/pages/login.jsx`
-- Uses `@capacitor/browser` to open OAuth in in-app browser
+- Imports `openAuthBrowser()` from `../iphanpy-overrides/utils/auth-overrides` to open OAuth in the in-app browser
+  - Narrow screens use `presentationStyle: 'popover'` (iOS shows it as a bottom sheet)
+  - Wide screens (≥600px: iPad, unfolded foldables) use `'fullscreen'`, because SFSafariViewController renders blank inside a real floating popover
 - Uses `store.local` instead of `sessionCookie` for code verifier (native compatibility)
 
 ## Customization Details
@@ -60,7 +63,7 @@ The following upstream files import from `iphanpy-overrides/`:
 
 **Key Changes:**
 1. **Header Blur Effect** - Frosted glass appearance on deck header
-2. **Safe Area Insets** - Proper spacing for iOS notch and home indicator
+2. **Safe Area Insets** - Proper spacing for iOS notch and home indicator, plus left/right insets for devices with a side status bar (e.g. folded foldables). Upstream doesn't pad these on `.deck-container` (timelines), `.deck-backdrop` (post view) or the account sheet footer, so `overrides.css` adds them
 3. **Status Bar Scroll** - Tapping iOS status bar scrolls the active timeline to top
 
 ## Merging from Upstream
@@ -89,6 +92,14 @@ When pulling changes from upstream Phanpy:
 ## Build Verification
 
 Run `npm run build` to verify all imports are correct and the build succeeds.
+
+Requires Node `>=22.19` (upstream `engines`). On older Node, npm silently skips Lingui's native binding and the build fails with "Cannot find native binding". Note that production builds strip `console.*` calls, so errors won't show in Safari Web Inspector.
+
+## iOS Native Project (Capacitor 8.5)
+
+- Uses the UIScene lifecycle (required by Xcode 27): `ios/App/App/SceneDelegate.swift` creates `MyViewController` as the root view controller, with `UIApplicationSceneManifest` in `Info.plist` and `configurationForConnecting` in `AppDelegate.swift`
+- URL opens (OAuth callback via `iphanpy://`) are delivered to `SceneDelegate`, not the `AppDelegate` URL methods
+- iOS deployment target is 15.0 (Podfile and Xcode project)
 
 ## Additional Customization Files
 

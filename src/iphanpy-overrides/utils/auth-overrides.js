@@ -1,3 +1,4 @@
+import { Browser } from '@capacitor/browser';
 import { Capacitor } from '@capacitor/core';
 
 /**
@@ -30,4 +31,18 @@ export function getRedirectURI() {
   const currentLocation = location.origin + location.pathname;
   
   return DEV || !sameSite ? currentLocation : WEBSITE;
+}
+
+/**
+ * Open the OAuth authorization URL in the in-app browser.
+ * - Narrow screens (iPhone): popover, which iOS adapts into a bottom sheet
+ * - Wide screens (iPad, unfolded foldables): fullscreen, because
+ *   SFSafariViewController renders blank inside a real floating popover
+ */
+export async function openAuthBrowser(url) {
+  const isWideScreen = window.matchMedia('(min-width: 600px)').matches;
+  await Browser.open({
+    url,
+    presentationStyle: isWideScreen ? 'fullscreen' : 'popover',
+  });
 }
