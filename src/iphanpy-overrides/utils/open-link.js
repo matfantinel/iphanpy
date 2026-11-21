@@ -12,7 +12,7 @@ export async function openLink(url) {
 
   const isNative = Capacitor.isNativePlatform();
 
-  if (isNative && !store.local.get('iphanpy-openLinksExternally')) {
+  if (isNative && !store.local.getJSON('iphanpy-openLinksExternally')) {
     try {
       await Browser.open({ url });
     } catch (error) {

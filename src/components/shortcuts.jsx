@@ -10,6 +10,7 @@ import { useLongPress } from 'use-long-press';
 import { useSnapshot } from 'valtio';
 
 import { SHORTCUTS_META } from '../components/shortcuts-settings';
+import NativeTabBarBridge from '../iphanpy-overrides/components/native-tab-bar';
 import { api } from '../utils/api';
 import { getLists } from '../utils/lists';
 import safeBoundingBoxPadding from '../utils/safe-bounding-box-padding';
@@ -294,6 +295,10 @@ function Shortcuts() {
               )}
             </ul>
           </nav>
+          <NativeTabBarBridge
+            shortcuts={formattedShortcuts}
+            tabBarRef={tabBarRef}
+          />
           <ControlledMenu
             ref={listsMenuRef}
             state={listsMenuState}
