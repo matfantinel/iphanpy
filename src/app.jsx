@@ -76,6 +76,7 @@ import focusDeck from './utils/focus-deck';
 import { initSubscription } from './utils/push-notifications';
 import { setupLinkInterceptor } from './iphanpy-overrides/utils/open-link';
 import { setupStatusBarScroll } from './iphanpy-overrides/utils/status-bar-scroll';
+import { disableInputZoom } from './iphanpy-overrides/utils/disable-input-zoom';
 import states, { hideAllModals, initStates, statusKey } from './utils/states';
 import store from './utils/store';
 import {
@@ -559,6 +560,7 @@ function App() {
   // Set up iOS status bar tap → scroll to top
   useEffect(() => {
     setupStatusBarScroll();
+    disableInputZoom();
   }, []);
 
   // Handle OAuth code from URL (web) on mount
