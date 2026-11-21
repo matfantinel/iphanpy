@@ -13,6 +13,7 @@ import Icon from '../components/icon';
 import LangSelector from '../components/lang-selector';
 import Link from '../components/link';
 import RelativeTime from '../components/relative-time';
+import IphanpySettings from '../iphanpy-overrides/components/iphanpy-settings';
 import languages from '../data/translang-languages';
 import { api, getPreferences, setPreferences } from '../utils/api';
 import getTranslateTargetLanguage from '../utils/get-translate-target-language';
@@ -279,6 +280,7 @@ function Settings({ onClose }) {
             </li>
           </ul>
         </section>
+        <IphanpySettings />
         {authenticated && (
           <>
             <h3>
@@ -398,7 +400,7 @@ function Settings({ onClose }) {
               </small>
             </p>
           </>
-        )}
+        )}        
         {authenticated && (
           <>
             <h3>

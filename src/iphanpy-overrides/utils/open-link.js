@@ -1,6 +1,8 @@
 import { Browser } from '@capacitor/browser';
 import { Capacitor } from '@capacitor/core';
 
+import store from '../../utils/store';
+
 /**
  * Opens a URL in the in-app browser on native platforms,
  * or in a new tab on web.
@@ -10,7 +12,7 @@ export async function openLink(url) {
 
   const isNative = Capacitor.isNativePlatform();
 
-  if (isNative) {
+  if (isNative && !store.local.get('iphanpy-openLinksExternally')) {
     try {
       await Browser.open({ url });
     } catch (error) {

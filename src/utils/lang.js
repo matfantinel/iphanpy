@@ -9,6 +9,7 @@ import Locale from 'intl-locale-textinfo-polyfill';
 
 import { ALL_LOCALES, DEFAULT_LANG } from '../locales';
 import { messages } from '../locales/en.po';
+import { messages as iphanpyMessages } from '../iphanpy-overrides/locales/en.po';
 import localeMatch from '../utils/locale-match';
 
 const { PHANPY_DEFAULT_LANG } = import.meta.env;
@@ -18,6 +19,7 @@ const langFileMaps = {
 };
 
 i18n.load(DEFAULT_LANG, messages);
+i18n.load(DEFAULT_LANG, iphanpyMessages);
 i18n.on('change', () => {
   const lang = i18n.locale;
   if (lang) {
@@ -43,7 +45,13 @@ export async function activateLang(lang) {
       const { messages } = await import(
         `../locales/${langFileMaps[lang] || lang}.po`
       );
-      i18n.loadAndActivate({ locale: lang, messages });
+      const { messages: iphanpyMessages } = await import(
+        `../iphanpy-overrides/locales/${langFileMaps[lang] || lang}.po`
+      );
+      i18n.loadAndActivate({
+        locale: lang,
+        messages: { ...messages, ...iphanpyMessages },
+      });
       console.log('💬 ACTIVATE LANG', lang, messages);
     } catch (e) {
       console.error(e);

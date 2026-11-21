@@ -13,6 +13,11 @@ const config = {
     {
       path: '<rootDir>/src/locales/{locale}',
       include: ['src'],
+      exclude: ['src/iphanpy-overrides'],
+    },
+    {
+      path: '<rootDir>/src/iphanpy-overrides/locales/{locale}',
+      include: ['src/iphanpy-overrides'],
     },
   ],
   // compileNamespace: 'es',
