@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "Uzi denaskan langetaron"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "Eksperimenta. Validas kiam ŝparvojoj montriĝas kiel langetaro, kun ĝis 5 ŝparvojoj."
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "Eksperimenta. Validas kiam ŝparvojoj montriĝas kiel langetaro."

@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "Použít nativní panel karet"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "Experimentální. Platí, když se zkratky zobrazují jako panel karet, s nejvýše 5 zkratkami."
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "Experimentální. Platí, když se zkratky zobrazují jako panel karet."

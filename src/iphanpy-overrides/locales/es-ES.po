@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "Usar barra de pestañas nativa"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "Experimental. Se aplica cuando los atajos se muestran como barra de pestañas, con hasta 5 atajos."
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "Experimental. Se aplica cuando los atajos se muestran como barra de pestañas."

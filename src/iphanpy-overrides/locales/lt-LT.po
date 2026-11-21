@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "Naudoti vietinę skirtukų juostą"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "Eksperimentinė. Taikoma, kai nuorodos rodomos kaip skirtukų juosta, su ne daugiau kaip 5 nuorodomis."
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "Eksperimentinė. Taikoma, kai nuorodos rodomos kaip skirtukų juosta."

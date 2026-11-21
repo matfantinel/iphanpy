@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "Erabili fitxa-barra natiboa"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "Esperimentala. Lasterbideak fitxa-barra gisa erakusten direnean aplikatzen da, gehienez 5 lasterbiderekin."
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "Esperimentala. Lasterbideak fitxa-barra gisa erakusten direnean aplikatzen da."

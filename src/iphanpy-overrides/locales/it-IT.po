@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "Usa la barra delle schede nativa"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "Sperimentale. Si applica quando le scorciatoie sono mostrate come barra delle schede, con al massimo 5 scorciatoie."
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "Sperimentale. Si applica quando le scorciatoie sono mostrate come barra delle schede."

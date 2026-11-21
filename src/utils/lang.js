@@ -18,8 +18,9 @@ const langFileMaps = {
   // kab: 'kab-KAB',
 };
 
-i18n.load(DEFAULT_LANG, messages);
+// iPhanpy's catalog goes first, so it can never override upstream's translations
 i18n.load(DEFAULT_LANG, iphanpyMessages);
+i18n.load(DEFAULT_LANG, messages);
 i18n.on('change', () => {
   const lang = i18n.locale;
   if (lang) {
@@ -50,7 +51,7 @@ export async function activateLang(lang) {
       );
       i18n.loadAndActivate({
         locale: lang,
-        messages: { ...messages, ...iphanpyMessages },
+        messages: { ...iphanpyMessages, ...messages },
       });
       console.log('💬 ACTIVATE LANG', lang, messages);
     } catch (e) {

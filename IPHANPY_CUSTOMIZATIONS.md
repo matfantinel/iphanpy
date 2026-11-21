@@ -65,6 +65,7 @@ The following upstream files import from `iphanpy-overrides/`:
 ### 8. `src/utils/lang.js`
 - Imports the iPhanpy catalog (`../iphanpy-overrides/locales/{locale}.po`) and merges it with the main one
 - In `activateLang()`, both catalogs must be passed to `loadAndActivate()` in a single merged object. `loadAndActivate()` replaces the locale's messages, so loading the iPhanpy catalog separately gets wiped out and shows message IDs (e.g. `p44JcH`)
+- The iPhanpy catalog is merged first (`{ ...iphanpyMessages, ...messages }`), so upstream wins if both have the same id: an iPhanpy entry can never replace an upstream translation with English
 
 ### 9. `lingui.config.js`
 - Adds a second catalog for `src/iphanpy-overrides/`, and excludes that folder from the main catalog
@@ -116,15 +117,24 @@ Saved per device with `store.local.setJSON`/`getJSON` (plain `get` returns strin
 
 **Purpose:** Replace the web tab bar with a native `UITabBar` (Liquid Glass on iOS 26+)
 
-- Enabled with the `iphanpy-nativeTabBar` setting, and only applies when the shortcuts view mode is "Tab bar" with up to 5 shortcuts (more fall back to the web tab bar)
-- `ios/App/App/NativeTabBarPlugin.swift` adds a `UITabBar` over the web view. Methods: `setTabs({ tabs: [{ title, symbol }], selected })`, `setSelected`, `setHidden`, `setTint({ color: '#rrggbb' })`, `remove`. Events: `tabSelect` (tab index) and `heightChange` (bar height incl. home indicator)
+- Enabled with the `iphanpy-nativeTabBar` setting, and only applies when the shortcuts view mode is "Tab bar" and Phanpy shows that bar at the bottom (`BOTTOM_TAB_BAR_QUERY`, copied from `shortcuts.css`; wide screens with a pointer get Phanpy's top bar instead)
+- `ios/App/App/NativeTabBarPlugin.swift` adds a `UITabBar` over the web view. Methods: `setTabs({ tabs, selected, moreCancelTitle })`, `setSelected`, `setHidden`, `setTint({ color: '#rrggbb' })`, `setTheme({ theme })`, `setScrolledAway({ away })`, `remove`. Events: `tabSelect` (tab index) and `heightChange` (bar height incl. home indicator)
+- Each tab: `{ title, symbol, image?, badge? }`
+  - `image`: URL drawn as a round icon instead of the symbol (the Profile avatar, from the shortcut's `altIcon`)
+  - `badge`: uses the symbol's `.badge` variant (e.g. `bell.badge`), a small dot in the icon's own color; falls back to a red badge dot if there isn't one (Notifications, when `states.notificationsShowNew`)
+  - Titles are trimmed with "…" to an equal share of the bar width (`fitTitles`), since iOS 26 sizes tabs to their titles and ignores `itemWidth`
+- More than 5 tabs: the first 4 are shown plus the system "More" tab, which opens an action sheet with the rest (selecting one of those highlights More). On iPad the sheet is a popover from the More tab, found through `itemViews()` (UITabBar doesn't expose its buttons, so it collects its `UIControl`s, deduped by position as iOS 26 draws each button twice)
+- Titles that are promises (list names) are resolved before being sent, like the web bar's `<AsyncText>`
+- "Cancel" uses upstream's translation by message id (`i18n._(id)` through a variable). An inline `i18n._({ id, message })` would be extracted into iPhanpy's catalog with an English fallback
+- No long-press actions (the web bar's Profile → accounts and Lists menu): iOS 26's press-and-drag between tabs takes the touch, and the feature was dropped
 - `native-tab-bar.jsx` keeps the web tab bar in the DOM but invisible (`body.iphanpy-native-tab-bar`), so spacing, the active tab and click handlers are reused: a native tap just clicks the matching web link, and the active tab is read from its `.is-active` class
 - Phanpy icon names are mapped to SF Symbols in `SYMBOLS` (`.fill` variants are used for the selected tab when they exist, unknown symbols fall back to a circle)
 - The native bar sits above all web content, so it is hidden while any `states.show*` flag is set or a `.deck-backdrop` (post view) is open.
 - Web menus can't appear above the native bar, so they keep clear of it: `--iphanpy-menu-inset-bottom` on `:root` holds the bar height (0 while hidden), and `safeBoundingBoxPadding()` uses it as the bottom inset. Menus compute this on render, so a `resize` event is fired when the height changes (`Menu2` re-renders on resize)
 - The selected tab uses Phanpy's accent (`--link-color`, resolved to hex through a canvas), resent on navigation, sheet changes and system theme changes
 - The bar height is set as `--iphanpy-tab-bar-height` on `:root`; `overrides.css` uses it to place the compose button and the minimized composer (upstream assumes the web bar's `52px` + safe area)
-- Not done yet: avatar/image icons, long-press actions (Profile → accounts, Lists menu), Phanpy light/dark theme syncing (the bar follows the system), more than 5 tabs, hiding on scroll (the web bar hides with the header when scrolling down)
+- The bar follows Phanpy's theme setting (`store.local` `theme`: `light`, `dark`, or unset for the system) through `overrideUserInterfaceStyle`
+- Hide on scroll: Phanpy slides its tab bar away while the timeline header is `hidden` (upstream CSS in `shortcuts.css`). That rule also sets `pointer-events: none`, so the bridge reads that from the (invisible) web bar instead of copying the selectors, and slides the native bar down with `setScrolledAway`. It's checked when any `hidden` attribute changes (`MutationObserver`) and on navigation. Kept separate from `setHidden` (fade, for sheets) so both can apply
 
 ### App Language in iOS Settings
 

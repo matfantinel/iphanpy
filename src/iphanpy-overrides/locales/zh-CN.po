@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "使用原生标签栏"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "实验性功能。在快捷方式以标签栏显示且不超过 5 个时生效。"
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "实验性功能。在快捷方式以标签栏显示时生效。"

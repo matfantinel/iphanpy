@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "ネイティブのタブバーを使用"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "試験的機能。ショートカットをタブバーとして表示し、ショートカットが5個以下の場合に適用されます。"
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "試験的機能。ショートカットをタブバーとして表示している場合に適用されます。"

@@ -82,8 +82,7 @@ function IphanpySettings() {
             <div class="sub-section insignificant">
               <small>
                 <Trans>
-                  Experimental. Applies when shortcuts are shown as a tab bar,
-                  with up to 5 shortcuts.
+                  Experimental. Applies when shortcuts are shown as a tab bar.
                 </Trans>
               </small>
             </div>

@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { useLingui } from '@lingui/react';
 import { useLocation } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 
@@ -9,8 +10,14 @@ import NativeTabBar from '../utils/NativeTabBarPlugin';
 
 export const NATIVE_TAB_BAR_EVENT = 'iphanpy-nativeTabBar';
 
-// shortcut: more tabs fall back to the web tab bar, until there's a "More" tab
-const MAX_TABS = 5;
+// Upstream's "Cancel" message id, so it uses upstream's translations. Passed as a
+// variable, as Lingui would extract an inline descriptor into iPhanpy's catalog
+const CANCEL_MESSAGE = 'dEgA5A';
+
+// Where Phanpy shows its tab bar at the bottom (from shortcuts.css). Elsewhere
+// (wide screens with a pointer) it's at the top, so the native bar isn't used
+const BOTTOM_TAB_BAR_QUERY =
+  '(max-width: calc(40em - 1px)), (min-width: 40em) and (hover: none)';
 
 // Phanpy icon name → SF Symbol (".fill" is added for the selected tab when it exists)
 const SYMBOLS = {
@@ -56,6 +63,17 @@ function useNativeTabBarSetting() {
   return enabled;
 }
 
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => matchMedia(query).matches);
+  useEffect(() => {
+    const media = matchMedia(query);
+    const update = () => setMatches(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [query]);
+  return matches;
+}
+
 /**
  * Mirrors the web tab bar (`tabBarRef`) as a native UITabBar.
  * The web tab bar stays in the DOM (invisible) so its spacing, active state
@@ -63,22 +81,56 @@ function useNativeTabBarSetting() {
  */
 function NativeTabBarBridge({ shortcuts, tabBarRef }) {
   const enabled = useNativeTabBarSetting();
-  const active = enabled && shortcuts.length <= MAX_TABS;
+  const active = useMediaQuery(BOTTOM_TAB_BAR_QUERY) && enabled;
   const location = useLocation();
   const snapStates = useSnapshot(states);
   // Bar height and visibility, for keeping web menus clear of the bar
   const heightRef = useRef(0);
   const hiddenRef = useRef(false);
+  const awayRef = useRef(false);
   const syncMenuInset = () =>
     document.documentElement.style.setProperty(
       '--iphanpy-menu-inset-bottom',
-      `${hiddenRef.current ? 0 : heightRef.current}px`,
+      `${hiddenRef.current || awayRef.current ? 0 : heightRef.current}px`,
     );
 
-  // shortcut: titles that aren't plain strings (e.g. async list names) show empty, until phase 2
-  const tabs = shortcuts.map(({ icon, title }) => ({
-    title: typeof title === 'string' ? title : '',
+  // Phanpy slides its tab bar away while scrolling down, with a CSS rule that
+  // also sets pointer-events: none (not animated, so it's reliable to read)
+  const syncScrolledAway = () => {
+    const nav = tabBarRef.current;
+    const away = !!nav && getComputedStyle(nav).pointerEvents === 'none';
+    if (away === awayRef.current) return;
+    awayRef.current = away;
+    syncMenuInset();
+    NativeTabBar.setScrolledAway({ away });
+  };
+
+  const { i18n } = useLingui();
+  const shortcutsRef = useRef(shortcuts);
+  shortcutsRef.current = shortcuts;
+
+  // Some titles are promises (e.g. a list's name), like the web bar's <AsyncText>
+  const [asyncTitles, setAsyncTitles] = useState({});
+  const asyncKey = shortcuts
+    .filter(({ title }) => typeof title?.then === 'function')
+    .map(({ path }) => path)
+    .join(' ');
+  useEffect(() => {
+    for (const { path, title } of shortcutsRef.current) {
+      if (typeof title?.then !== 'function') continue;
+      Promise.resolve(title).then((text) =>
+        setAsyncTitles((titles) =>
+          titles[path] === text ? titles : { ...titles, [path]: text },
+        ),
+      );
+    }
+  }, [asyncKey]);
+
+  const tabs = shortcuts.map(({ id, path, icon, altIcon, title }) => ({
+    title: typeof title === 'string' ? title : asyncTitles[path] || '',
     symbol: SYMBOLS[icon] || 'circle',
+    image: altIcon?.url,
+    badge: id === 'notifications' && snapStates.notificationsShowNew,
   }));
   const tabsKey = JSON.stringify(tabs);
 
@@ -94,7 +146,11 @@ function NativeTabBarBridge({ shortcuts, tabBarRef }) {
   useEffect(() => {
     document.body.classList.toggle('iphanpy-native-tab-bar', active);
     if (!active) return;
-    NativeTabBar.setTabs({ tabs, selected: getSelected() });
+    NativeTabBar.setTabs({
+      tabs,
+      selected: getSelected(),
+      moreCancelTitle: i18n._(CANCEL_MESSAGE),
+    });
   }, [active, tabsKey]);
 
   useEffect(() => {
@@ -139,6 +195,25 @@ function NativeTabBarBridge({ shortcuts, tabBarRef }) {
     };
   }, [active]);
 
+  // Timelines toggle `hidden` on their header while scrolling
+  useEffect(() => {
+    if (!active) return;
+    let frame;
+    const observer = new MutationObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(syncScrolledAway);
+    });
+    observer.observe(document.body, {
+      subtree: true,
+      attributeFilter: ['hidden'],
+    });
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      awayRef.current = false;
+    };
+  }, [active]);
+
   // Theme changes can change the accent color
   useEffect(() => {
     if (!active) return;
@@ -158,10 +233,13 @@ function NativeTabBarBridge({ shortcuts, tabBarRef }) {
   useEffect(() => {
     if (!active) return;
     NativeTabBar.setSelected({ selected: getSelected() });
+    NativeTabBar.setTheme({ theme: store.local.get('theme') });
     NativeTabBar.setTint({ color: getAccentHex() });
     hiddenRef.current = modalOpen || !!document.querySelector('.deck-backdrop');
     syncMenuInset();
     NativeTabBar.setHidden({ hidden: hiddenRef.current });
+    // Switching pages can show/hide the web bar without a `hidden` change
+    syncScrolledAway();
   }, [active, tabsKey, location.pathname, location.search, modalOpen]);
 
   return null;

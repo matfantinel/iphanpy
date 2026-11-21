@@ -24,5 +24,5 @@ msgid "Use native tab bar"
 msgstr "Використовувати нативну панель вкладок"
 
 #: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
-msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
-msgstr "Експериментально. Застосовується, коли ярлики показано як панель вкладок і їх не більше 5."
+msgid "Experimental. Applies when shortcuts are shown as a tab bar."
+msgstr "Експериментально. Застосовується, коли ярлики показано як панель вкладок."
