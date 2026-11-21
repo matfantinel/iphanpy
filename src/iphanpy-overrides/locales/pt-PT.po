@@ -7,14 +7,22 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: pt-PT\n"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:34
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
 msgid "Open external links in Default Browser"
 msgstr "Abrir ligações externas no navegador predefinido"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:44
 msgid "If disabled, links will be opened in the in-app browser."
 msgstr "Se desativado, as ligações serão abertas no navegador da aplicação."
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:57
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:62
 msgid "Tap status bar to scroll to top"
 msgstr "Tocar na barra de estado para deslocar para o topo"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:79
+msgid "Use native tab bar"
+msgstr "Usar barra de separadores nativa"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
+msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
+msgstr "Experimental. Aplica-se quando os atalhos são mostrados como barra de separadores, com até 5 atalhos."

@@ -7,14 +7,22 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: ca-ES\n"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:34
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
 msgid "Open external links in Default Browser"
 msgstr "Obre els enllaços externs al navegador predeterminat"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:44
 msgid "If disabled, links will be opened in the in-app browser."
 msgstr "Si està desactivat, els enllaços s'obriran al navegador integrat."
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:57
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:62
 msgid "Tap status bar to scroll to top"
 msgstr "Toca la barra d’estat per desplaçar-te a dalt"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:79
+msgid "Use native tab bar"
+msgstr "Utilitza la barra de pestanyes nativa"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
+msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
+msgstr "Experimental. S’aplica quan les dreceres es mostren com a barra de pestanyes, amb un màxim de 5 dreceres."

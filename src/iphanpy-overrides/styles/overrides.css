@@ -33,3 +33,32 @@
   padding-left: max(16px, env(safe-area-inset-left));
   padding-right: max(16px, env(safe-area-inset-right));
 }
+
+/* Native tab bar: keep the web one in place (for spacing and click handlers), just invisible */
+body.iphanpy-native-tab-bar #shortcuts .tab-bar {
+  visibility: hidden;
+}
+
+/* Native tab bar: sit above its real height instead of the web bar's 52px + safe area */
+@media (max-width: calc(40em - 1px)), (min-width: 40em) and (hover: none) {
+  body.iphanpy-native-tab-bar {
+    #app[data-shortcuts-view-mode='tab-menu-bar'] #compose-button {
+      bottom: calc(
+        16px +
+          var(
+            --iphanpy-tab-bar-height,
+            calc(52px + env(safe-area-inset-bottom))
+          )
+      );
+    }
+    #app[data-shortcuts-view-mode='tab-menu-bar'] ~ #modal-container > div.min {
+      --bottom: calc(
+        var(--compose-button-dimension-margin) +
+          var(
+            --iphanpy-tab-bar-height,
+            calc(52px + env(safe-area-inset-bottom))
+          )
+      );
+    }
+  }
+}

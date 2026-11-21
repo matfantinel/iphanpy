@@ -10,6 +10,10 @@ class MyViewController: CAPBridgeViewController {
         return configuration
     }
 
+    override func capacitorDidLoad() {
+        bridge?.registerPluginInstance(NativeTabBarPlugin())
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         webView!.allowsBackForwardNavigationGestures = true

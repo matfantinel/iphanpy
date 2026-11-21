@@ -13,7 +13,8 @@ src/iphanpy-overrides/
 ├── README.md                           # Documentation for the overrides folder
 ├── components/
 │   ├── camera-capture-input.jsx        # Native camera support
-│   └── iphanpy-settings.jsx            # "iPhanpy" section in Settings (native only)
+│   ├── iphanpy-settings.jsx            # "iPhanpy" section in Settings (native only)
+│   └── native-tab-bar.jsx              # Mirrors the web tab bar as a native UITabBar
 ├── locales/
 │   └── {locale}.po                     # Translations for iPhanpy-only strings
 ├── styles/
@@ -21,6 +22,7 @@ src/iphanpy-overrides/
 └── utils/
     ├── auth-overrides.js               # OAuth redirect URI + in-app auth browser
     ├── disable-input-zoom.js           # Stops WebKit zooming into small inputs
+    ├── NativeTabBarPlugin.js           # JS side of the native tab bar plugin
     ├── open-link.js                    # In-app browser link interceptor
     └── status-bar-scroll.js            # iOS status bar tap → scroll to top
 ```
@@ -54,11 +56,17 @@ The following upstream files import from `iphanpy-overrides/`:
 - Imports `IphanpySettings` from `../iphanpy-overrides/components/iphanpy-settings` and renders it just above the Wellbeing section
 - The component renders nothing on web, and shows whether or not the user is logged in
 
-### 6. `src/utils/lang.js`
+### 6. `src/components/shortcuts.jsx`
+- Imports `NativeTabBarBridge` from `../iphanpy-overrides/components/native-tab-bar` and renders it next to the tab bar `<nav>`, passing `formattedShortcuts` and `tabBarRef`
+
+### 7. `src/utils/safe-bounding-box-padding.js`
+- Adds `iphanpyMenuInsetBottom()`, which raises the bottom padding of menus to `--iphanpy-menu-inset-bottom` so they don't open under the native tab bar
+
+### 8. `src/utils/lang.js`
 - Imports the iPhanpy catalog (`../iphanpy-overrides/locales/{locale}.po`) and merges it with the main one
 - In `activateLang()`, both catalogs must be passed to `loadAndActivate()` in a single merged object. `loadAndActivate()` replaces the locale's messages, so loading the iPhanpy catalog separately gets wiped out and shows message IDs (e.g. `p44JcH`)
 
-### 7. `lingui.config.js`
+### 9. `lingui.config.js`
 - Adds a second catalog for `src/iphanpy-overrides/`, and excludes that folder from the main catalog
 
 ## Customization Details
@@ -87,9 +95,10 @@ The following upstream files import from `iphanpy-overrides/`:
 
 **Purpose:** Settings that only apply to the native app, kept separate from upstream's
 
-Saved per device in `store.local`, with keys prefixed `iphanpy-`:
+Saved per device with `store.local.setJSON`/`getJSON` (plain `get` returns strings, so a saved `false` reads as `"false"`, which is truthy), with keys prefixed `iphanpy-`:
 - `iphanpy-openLinksExternally` (default `false`) - Opens external links in the default browser instead of the in-app browser (issue #9). On native, `window.open` is handed to the system browser by Capacitor. Login is unaffected, as it uses `openAuthBrowser()`
 - `iphanpy-statusBarScroll` (default `true`) - Toggles status bar tap → scroll to top
+- `iphanpy-nativeTabBar` (default `false`) - Experimental native tab bar, see below
 
 ### Translations
 
@@ -102,6 +111,20 @@ Saved per device in `store.local`, with keys prefixed `iphanpy-`:
   3. Fill in the `msgstr` for each locale in `src/iphanpy-overrides/locales/`
 - Use `npx lingui extract --clean` instead to drop strings that were removed (then revert `src/locales` again)
 - `npm run build` also runs `messages:extract:clean`, which renumbers references in `src/locales/en.po`. Revert it before committing
+
+### Native Tab Bar (experimental)
+
+**Purpose:** Replace the web tab bar with a native `UITabBar` (Liquid Glass on iOS 26+)
+
+- Enabled with the `iphanpy-nativeTabBar` setting, and only applies when the shortcuts view mode is "Tab bar" with up to 5 shortcuts (more fall back to the web tab bar)
+- `ios/App/App/NativeTabBarPlugin.swift` adds a `UITabBar` over the web view. Methods: `setTabs({ tabs: [{ title, symbol }], selected })`, `setSelected`, `setHidden`, `setTint({ color: '#rrggbb' })`, `remove`. Events: `tabSelect` (tab index) and `heightChange` (bar height incl. home indicator)
+- `native-tab-bar.jsx` keeps the web tab bar in the DOM but invisible (`body.iphanpy-native-tab-bar`), so spacing, the active tab and click handlers are reused: a native tap just clicks the matching web link, and the active tab is read from its `.is-active` class
+- Phanpy icon names are mapped to SF Symbols in `SYMBOLS` (`.fill` variants are used for the selected tab when they exist, unknown symbols fall back to a circle)
+- The native bar sits above all web content, so it is hidden while any `states.show*` flag is set or a `.deck-backdrop` (post view) is open.
+- Web menus can't appear above the native bar, so they keep clear of it: `--iphanpy-menu-inset-bottom` on `:root` holds the bar height (0 while hidden), and `safeBoundingBoxPadding()` uses it as the bottom inset. Menus compute this on render, so a `resize` event is fired when the height changes (`Menu2` re-renders on resize)
+- The selected tab uses Phanpy's accent (`--link-color`, resolved to hex through a canvas), resent on navigation, sheet changes and system theme changes
+- The bar height is set as `--iphanpy-tab-bar-height` on `:root`; `overrides.css` uses it to place the compose button and the minimized composer (upstream assumes the web bar's `52px` + safe area)
+- Not done yet: avatar/image icons, long-press actions (Profile → accounts, Lists menu), Phanpy light/dark theme syncing (the bar follows the system), more than 5 tabs, hiding on scroll (the web bar hides with the header when scrolling down)
 
 ### App Language in iOS Settings
 
@@ -120,6 +143,8 @@ When pulling changes from upstream Phanpy:
    - `src/components/compose.jsx` (camera component import)
    - `src/pages/login.jsx` (browser open, storage usage)
    - `src/pages/settings.jsx` (iPhanpy settings section)
+   - `src/components/shortcuts.jsx` (native tab bar bridge)
+   - `src/utils/safe-bounding-box-padding.js` (menu inset for the native tab bar)
    - `src/utils/lang.js` (iPhanpy catalog loading)
    - `lingui.config.js` (iPhanpy catalog)
    - `src/locales/*.po` (keep upstream's version; never commit iPhanpy changes here)
@@ -137,6 +162,7 @@ When pulling changes from upstream Phanpy:
    - UI appearance (header blur, safe areas)
    - Status bar tap scroll to top (iOS native)
    - iPhanpy settings and their translations (switch language in Settings, check for message IDs like `p44JcH`)
+   - Native tab bar (if enabled): tapping tabs, re-tapping to scroll to top, hidden under sheets and the post view
    - New languages in `src/data/catalogs.json` (add them to `CFBundleLocalizations`)
 
 ## Build Verification
@@ -149,6 +175,7 @@ Requires Node `>=22.19` (upstream `engines`). On older Node, npm silently skips 
 
 - Uses the UIScene lifecycle (required by Xcode 27): `ios/App/App/SceneDelegate.swift` creates `MyViewController` as the root view controller, with `UIApplicationSceneManifest` in `Info.plist` and `configurationForConnecting` in `AppDelegate.swift`
 - URL opens (OAuth callback via `iphanpy://`) are delivered to `SceneDelegate`, not the `AppDelegate` URL methods
+- Local plugins are registered in `MyViewController.capacitorDidLoad()` via `registerPluginInstance` (`NativeTabBarPlugin`), or with a `.m` `CAP_PLUGIN` file (`LocalNetworkPlugin`). New Swift files must be added to the Xcode project
 - iOS deployment target is 15.0 (Podfile and Xcode project)
 
 ## Additional Customization Files

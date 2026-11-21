@@ -7,14 +7,22 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: ko-KR\n"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:34
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
 msgid "Open external links in Default Browser"
 msgstr "외부 링크를 기본 브라우저에서 열기"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:44
 msgid "If disabled, links will be opened in the in-app browser."
 msgstr "비활성화하면 링크가 인앱 브라우저에서 열립니다."
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:57
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:62
 msgid "Tap status bar to scroll to top"
 msgstr "상태 표시줄을 탭하여 맨 위로 스크롤"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:79
+msgid "Use native tab bar"
+msgstr "네이티브 탭 바 사용"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
+msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
+msgstr "실험적 기능. 바로가기를 탭 바로 표시하고 바로가기가 5개 이하일 때 적용됩니다."

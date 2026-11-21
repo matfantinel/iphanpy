@@ -7,14 +7,22 @@ msgstr ""
 "X-Generator: @lingui/cli\n"
 "Language: de-DE\n"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:34
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
 msgid "Open external links in Default Browser"
 msgstr "Externe Links im Standardbrowser öffnen"
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:39
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:44
 msgid "If disabled, links will be opened in the in-app browser."
 msgstr "Wenn deaktiviert, werden Links im In-App-Browser geöffnet."
 
-#: src/iphanpy-overrides/components/iphanpy-settings.jsx:57
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:62
 msgid "Tap status bar to scroll to top"
 msgstr "Auf Statusleiste tippen, um nach oben zu scrollen"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:79
+msgid "Use native tab bar"
+msgstr "Native Tab-Leiste verwenden"
+
+#: src/iphanpy-overrides/components/iphanpy-settings.jsx:84
+msgid "Experimental. Applies when shortcuts are shown as a tab bar, with up to 5 shortcuts."
+msgstr "Experimentell. Gilt, wenn Verknüpfungen als Tab-Leiste angezeigt werden, mit bis zu 5 Verknüpfungen."

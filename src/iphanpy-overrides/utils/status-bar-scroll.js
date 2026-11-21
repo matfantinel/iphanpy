@@ -11,7 +11,7 @@ export function setupStatusBarScroll() {
   if (!Capacitor.isNativePlatform()) return;
 
   window.addEventListener('statusTap', () => {
-    if (!(store.local.get('iphanpy-statusBarScroll') ?? true)) return;
+    if (!(store.local.getJSON('iphanpy-statusBarScroll') ?? true)) return;
     const container = document.querySelector(
       '.deck-container:not([hidden])',
     );

@@ -19,8 +19,18 @@ function getSafeAreaInsets() {
 }
 requestAnimationFrame(getSafeAreaInsets);
 
+// iPhanpy: keep menus clear of the native tab bar (set by iphanpy-overrides/components/native-tab-bar.jsx)
+function iphanpyMenuInsetBottom(v) {
+  const inset = parseInt(
+    style.getPropertyValue('--iphanpy-menu-inset-bottom'),
+    10,
+  );
+  return Math.max(v, inset || 0);
+}
+
 function safeBoundingBoxPadding(paddings = []) {
   const str = safeAreaInsets
+    .map((v, i) => (i === 2 ? iphanpyMenuInsetBottom(v) : v))
     .map((v, i) => (v || defaultBoundingBoxPadding) + (paddings[i] || 0))
     .join(' ');
   // console.log(str);

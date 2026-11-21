@@ -20,6 +20,7 @@
 		C9CA805B2F41FAF700DCDD1C /* LocalNetworkPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = C9CA805A2F41FAF700DCDD1C /* LocalNetworkPlugin.m */; };
 		C9EB10432EB7993300C4D760 /* Phanpy.icon in Resources */ = {isa = PBXBuildFile; fileRef = C9EB10422EB7993300C4D760 /* Phanpy.icon */; };
 		C9EB10452EB7A03D00C4D760 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EB10442EB7A03300C4D760 /* MyViewController.swift */; };
+		C9F0A1B22F50000100DCDD1C /* NativeTabBarPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F0A1B12F50000100DCDD1C /* NativeTabBarPlugin.swift */; };
 		C9F5A0022F9B000100C4D760 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F5A0012F9B000100C4D760 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		C9EB103F2EB795E900C4D760 /* iPhanpy icon 2.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "iPhanpy icon 2.icon"; sourceTree = "<group>"; };
 		C9EB10422EB7993300C4D760 /* Phanpy.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Phanpy.icon; sourceTree = "<group>"; };
 		C9EB10442EB7A03300C4D760 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
+		C9F0A1B12F50000100DCDD1C /* NativeTabBarPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeTabBarPlugin.swift; sourceTree = "<group>"; };
 		C9F5A0012F9B000100C4D760 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				C9EB10442EB7A03300C4D760 /* MyViewController.swift */,
+				C9F0A1B12F50000100DCDD1C /* NativeTabBarPlugin.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				C9F5A0012F9B000100C4D760 /* SceneDelegate.swift */,
@@ -233,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9EB10452EB7A03D00C4D760 /* MyViewController.swift in Sources */,
+				C9F0A1B22F50000100DCDD1C /* NativeTabBarPlugin.swift in Sources */,
 				C9CA80572F41F95700DCDD1C /* LocalNetworkPlugin.swift in Sources */,
 				C9CA805B2F41FAF700DCDD1C /* LocalNetworkPlugin.m in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
