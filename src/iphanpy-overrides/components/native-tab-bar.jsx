@@ -170,19 +170,19 @@ function NativeTabBarBridge({ shortcuts, tabBarRef }) {
     });
     const heightHandle = NativeTabBar.addListener(
       'heightChange',
+      // How much of the bottom the bar covers (just the home indicator area when
+      // the system puts it on the side, e.g. the vertical bar on iPhone Duo)
       ({ height }) => {
-        if (height > 0) {
-          if (height !== heightRef.current) {
-            heightRef.current = height;
-            syncMenuInset();
-            // Menus compute their padding on render; Menu2 re-renders on resize
-            window.dispatchEvent(new Event('resize'));
-          }
-          document.documentElement.style.setProperty(
-            '--iphanpy-tab-bar-height',
-            `${height}px`,
-          );
+        if (height !== heightRef.current) {
+          heightRef.current = height;
+          syncMenuInset();
+          // Menus compute their padding on render; Menu2 re-renders on resize
+          window.dispatchEvent(new Event('resize'));
         }
+        document.documentElement.style.setProperty(
+          '--iphanpy-tab-bar-height',
+          `${height}px`,
+        );
       },
     );
     return () => {

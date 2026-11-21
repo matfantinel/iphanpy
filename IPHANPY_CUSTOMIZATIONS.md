@@ -14,7 +14,7 @@ src/iphanpy-overrides/
 ├── components/
 │   ├── camera-capture-input.jsx        # Native camera support
 │   ├── iphanpy-settings.jsx            # "iPhanpy" section in Settings (native only)
-│   └── native-tab-bar.jsx              # Mirrors the web tab bar as a native UITabBar
+│   └── native-tab-bar.jsx              # Mirrors the web tab bar as a native tab bar
 ├── locales/
 │   └── {locale}.po                     # Translations for iPhanpy-only strings
 ├── styles/
@@ -115,15 +115,19 @@ Saved per device with `store.local.setJSON`/`getJSON` (plain `get` returns strin
 
 ### Native Tab Bar (experimental)
 
-**Purpose:** Replace the web tab bar with a native `UITabBar` (Liquid Glass on iOS 26+)
+**Purpose:** Replace the web tab bar with a native tab bar (Liquid Glass on iOS 26+, and the vertical bar on devices that have one, e.g. iPhone Duo)
 
 - Enabled with the `iphanpy-nativeTabBar` setting, and only applies when the shortcuts view mode is "Tab bar" and Phanpy shows that bar at the bottom (`BOTTOM_TAB_BAR_QUERY`, copied from `shortcuts.css`; wide screens with a pointer get Phanpy's top bar instead)
-- `ios/App/App/NativeTabBarPlugin.swift` adds a `UITabBar` over the web view. Methods: `setTabs({ tabs, selected, moreCancelTitle })`, `setSelected`, `setHidden`, `setTint({ color: '#rrggbb' })`, `setTheme({ theme })`, `setScrolledAway({ away })`, `remove`. Events: `tabSelect` (tab index) and `heightChange` (bar height incl. home indicator)
+- `ios/App/App/NativeTabBarPlugin.swift` adds a `UITabBarController` with empty placeholder tabs over the web view (the web view stays the only content). Using the system controller rather than a standalone `UITabBar` is what lets iOS place the bar: a standalone bar can't go vertical. Methods: `setTabs({ tabs, selected, moreCancelTitle })`, `setSelected`, `setHidden`, `setTint({ color: '#rrggbb' })`, `setTheme({ theme })`, `setScrolledAway({ away })`, `remove`. Events: `tabSelect` (tab index) and `heightChange` (how much of the bottom the bar covers, incl. the home indicator)
+- Placement follows `UITraitCollection.verticalBarEdge` (iOS 27.1+, updated through `systemTraitsAffectingVerticalBarEdge`):
+  - Bottom: the controller's view is a strip along the bottom, resized to the bar's height, so the rest of the web view stays touchable. Its horizontal size class is overridden to compact, as iPad's regular width would put the bar at the top
+  - Leading/trailing (vertical bar): the controller's view fills the column the system reserves as safe area. `heightChange` then sends just the bottom safe area, so the compose button keeps clear of the home indicator, and hide-on-scroll slides it sideways
+  - A tab bar controller always has a selected tab, so pages without a matching tab keep the last one selected
 - Each tab: `{ title, symbol, image?, badge? }`
   - `image`: URL drawn as a round icon instead of the symbol (the Profile avatar, from the shortcut's `altIcon`)
   - `badge`: uses the symbol's `.badge` variant (e.g. `bell.badge`), a small dot in the icon's own color; falls back to a red badge dot if there isn't one (Notifications, when `states.notificationsShowNew`)
-  - Titles are trimmed with "…" to an equal share of the bar width (`fitTitles`), since iOS 26 sizes tabs to their titles and ignores `itemWidth`
-- More than 5 tabs: the first 4 are shown plus the system "More" tab, which opens an action sheet with the rest (selecting one of those highlights More). On iPad the sheet is a popover from the More tab, found through `itemViews()` (UITabBar doesn't expose its buttons, so it collects its `UIControl`s, deduped by position as iOS 26 draws each button twice)
+  - Titles are trimmed with "…" to an equal share of the bar width (`fitTitles`, capped at 440pt as iPad's bar doesn't span the screen), since iOS 26 sizes tabs to their titles and ignores `itemWidth`. The vertical bar shows no titles
+- More than 5 tabs: the first 4 are shown plus the system "More" tab, which opens an action sheet with the rest (selecting one of those highlights More). On iPad and the iPhone Duo the sheet is a popover from the More tab, found through `itemViews()` (the buttons aren't exposed, so it collects the visible `UIControl`s in the tab controller's view, deduped by position as iOS 26 draws each button twice; the vertical bar's buttons aren't inside `tabBar`). The system "More" list isn't used: at most 5 placeholder tabs are given to the controller
 - Titles that are promises (list names) are resolved before being sent, like the web bar's `<AsyncText>`
 - "Cancel" uses upstream's translation by message id (`i18n._(id)` through a variable). An inline `i18n._({ id, message })` would be extracted into iPhanpy's catalog with an English fallback
 - No long-press actions (the web bar's Profile → accounts and Lists menu): iOS 26's press-and-drag between tabs takes the touch, and the feature was dropped
@@ -134,7 +138,7 @@ Saved per device with `store.local.setJSON`/`getJSON` (plain `get` returns strin
 - The selected tab uses Phanpy's accent (`--link-color`, resolved to hex through a canvas), resent on navigation, sheet changes and system theme changes
 - The bar height is set as `--iphanpy-tab-bar-height` on `:root`; `overrides.css` uses it to place the compose button and the minimized composer (upstream assumes the web bar's `52px` + safe area)
 - The bar follows Phanpy's theme setting (`store.local` `theme`: `light`, `dark`, or unset for the system) through `overrideUserInterfaceStyle`
-- Hide on scroll: Phanpy slides its tab bar away while the timeline header is `hidden` (upstream CSS in `shortcuts.css`). That rule also sets `pointer-events: none`, so the bridge reads that from the (invisible) web bar instead of copying the selectors, and slides the native bar down with `setScrolledAway`. It's checked when any `hidden` attribute changes (`MutationObserver`) and on navigation. Kept separate from `setHidden` (fade, for sheets) so both can apply
+- Hide on scroll: Phanpy slides its tab bar away while the timeline header is `hidden` (upstream CSS in `shortcuts.css`). That rule also sets `pointer-events: none`, so the bridge reads that from the (invisible) web bar instead of copying the selectors, and slides the native bar off its edge with `setScrolledAway`. It's checked when any `hidden` attribute changes (`MutationObserver`) and on navigation. Kept separate from `setHidden` (fade, for sheets) so both can apply
 
 ### App Language in iOS Settings
 
