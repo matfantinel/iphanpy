@@ -26,6 +26,14 @@
       ],
       "versions": [
         {
+          "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/0d35e3df-3a42-4ec0-9e06-f28ff2178d81/manifest.json",
+          "size": 7500000,
+          "version": "1.7.0",
+          "buildVersion": "22",
+          "date": "2026-11-23T12:00:00+01:00",
+          "localizedDescription": "This update brings some extra settings so you can fine tune the way you use iPhanpy:\n\n- New experimental native tab bar (enable it in Settings)\n\n- Option to open external links in the default browser instead of in-app\n\n- Option to disable \"tap status bar to scroll\"\n\n- Improve device language detection"
+        },
+        {
           "downloadURL": "https://github.com/matfantinel/iphanpy/raw/refs/heads/main/altstore/PAL/d5bac488-4859-476e-9771-38d379506f30/manifest.json",
           "size": 7500000,
           "version": "1.6.1",

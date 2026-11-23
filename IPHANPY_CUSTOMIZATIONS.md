@@ -119,9 +119,10 @@ Saved per device with `store.local.setJSON`/`getJSON` (plain `get` returns strin
 
 - Enabled with the `iphanpy-nativeTabBar` setting, and only applies when the shortcuts view mode is "Tab bar" and Phanpy shows that bar at the bottom (`BOTTOM_TAB_BAR_QUERY`, copied from `shortcuts.css`; wide screens with a pointer get Phanpy's top bar instead)
 - `ios/App/App/NativeTabBarPlugin.swift` adds a `UITabBarController` with empty placeholder tabs over the web view (the web view stays the only content). Using the system controller rather than a standalone `UITabBar` is what lets iOS place the bar: a standalone bar can't go vertical. Methods: `setTabs({ tabs, selected, moreCancelTitle })`, `setSelected`, `setHidden`, `setTint({ color: '#rrggbb' })`, `setTheme({ theme })`, `setScrolledAway({ away })`, `remove`. Events: `tabSelect` (tab index) and `heightChange` (how much of the bottom the bar covers, incl. the home indicator)
+- The controller's view fills the screen, like in a native app: the system sizes the bar from its container, and in just the vertical bar's column the tabs came out smaller than in other apps. It sits in a `PassthroughView` that only keeps touches on views smaller than the screen (the bar and its buttons), so the controller's full-screen containers let touches through to the web view
 - Placement follows `UITraitCollection.verticalBarEdge` (iOS 27.1+, updated through `systemTraitsAffectingVerticalBarEdge`):
-  - Bottom: the controller's view is a strip along the bottom, resized to the bar's height, so the rest of the web view stays touchable. Its horizontal size class is overridden to compact, as iPad's regular width would put the bar at the top
-  - Leading/trailing (vertical bar): the controller's view fills the column the system reserves as safe area. `heightChange` then sends just the bottom safe area, so the compose button keeps clear of the home indicator, and hide-on-scroll slides it sideways
+  - Bottom: the horizontal size class is overridden to compact, as iPad's regular width would put the bar at the top
+  - Leading/trailing (vertical bar): `heightChange` sends just the bottom safe area, so the compose button keeps clear of the home indicator, and hide-on-scroll slides the bar sideways out of the column the system reserves as safe area
   - A tab bar controller always has a selected tab, so pages without a matching tab keep the last one selected
 - Each tab: `{ title, symbol, image?, badge? }`
   - `image`: URL drawn as a round icon instead of the symbol (the Profile avatar, from the shortcut's `altIcon`)

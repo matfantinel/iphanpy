@@ -28,9 +28,8 @@ public class NativeTabBarPlugin: CAPPlugin, CAPBridgedPlugin, UITabBarController
 
     private var tabController: UITabBarController?
     private var placement: Placement?
-    /// The container only covers the bar's area, so the rest of the web view stays touchable
-    private var placementConstraints: [NSLayoutConstraint] = []
-    private var stripHeight: NSLayoutConstraint?
+    /// Holds the tab bar controller's (full screen) view, letting touches outside the bar through
+    private var container: UIView?
     private var heightObservation: NSKeyValueObservation?
     private var traitRegistration: Any?
     private var tabs: [JSObject] = []
@@ -69,7 +68,7 @@ public class NativeTabBarPlugin: CAPPlugin, CAPBridgedPlugin, UITabBarController
     @objc func setHidden(_ call: CAPPluginCall) {
         let hidden = call.getBool("hidden") ?? false
         DispatchQueue.main.async {
-            guard let container = self.tabController?.view else {
+            guard let container = self.container else {
                 call.resolve()
                 return
             }
@@ -129,9 +128,10 @@ public class NativeTabBarPlugin: CAPPlugin, CAPBridgedPlugin, UITabBarController
                 tabController.view.removeFromSuperview()
                 tabController.removeFromParent()
             }
+            self.container?.removeFromSuperview()
+            self.container = nil
             self.tabController = nil
             self.placement = nil
-            self.placementConstraints = []
             call.resolve()
         }
     }
@@ -234,15 +234,25 @@ public class NativeTabBarPlugin: CAPPlugin, CAPBridgedPlugin, UITabBarController
         guard let parent = bridge?.viewController, let view = parent.view else { return nil }
         let tabController = UITabBarController()
         tabController.delegate = self
+        // Full screen like in a native app, as the system sizes the bar from its container
+        // (in just the vertical bar's column, its tabs come out smaller than in other apps)
+        let container = PassthroughView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(container)
         parent.addChild(tabController)
         tabController.view.backgroundColor = .clear
         tabController.view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(tabController.view)
+        container.addSubview(tabController.view)
         tabController.didMove(toParent: parent)
+        NSLayoutConstraint.activate([container, tabController.view].flatMap { child in [
+            child.topAnchor.constraint(equalTo: view.topAnchor),
+            child.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            child.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            child.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ] })
+        self.container = container
         self.tabController = tabController
 
-        // The bar's height doesn't depend on the container's, so the strip is resized to fit it.
-        // Reported (incl. the home indicator area) so the web side can lay out around it.
         heightObservation = tabController.tabBar.observe(\.bounds, options: [.new]) { [weak self] _, _ in
             self?.reportHeight()
         }
@@ -270,34 +280,6 @@ public class NativeTabBarPlugin: CAPPlugin, CAPBridgedPlugin, UITabBarController
         guard newPlacement != placement else { return }
         placement = newPlacement
 
-        let container = tabController.view!
-        let safeArea = view.safeAreaLayoutGuide
-        NSLayoutConstraint.deactivate(placementConstraints)
-        switch newPlacement {
-        case .bottom:
-            let height = container.heightAnchor.constraint(equalToConstant: stripHeight?.constant ?? 100)
-            stripHeight = height
-            placementConstraints = [
-                container.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                container.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                container.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                height,
-            ]
-        case .leading, .trailing:
-            // The system reserves the vertical bar's column as safe area
-            let leading = newPlacement == .leading
-            placementConstraints = [
-                container.topAnchor.constraint(equalTo: view.topAnchor),
-                container.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-                leading
-                    ? container.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-                    : container.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                leading
-                    ? container.trailingAnchor.constraint(equalTo: safeArea.leadingAnchor)
-                    : container.leadingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            ]
-        }
-        NSLayoutConstraint.activate(placementConstraints)
         // On iPad (regular width) UITabBarController puts its bar at the top; keep it at the bottom
         parent.setOverrideTraitCollection(
             newPlacement == .bottom ? UITraitCollection(horizontalSizeClass: .compact) : nil,
@@ -323,21 +305,21 @@ public class NativeTabBarPlugin: CAPPlugin, CAPBridgedPlugin, UITabBarController
         }
         let height = bar.frame.height
         guard height > 0 else { return }
-        if stripHeight?.constant != height { stripHeight?.constant = height }
         notifyListeners("heightChange", data: ["height": height], retainUntilConsumed: true)
     }
 
     /// Moves the bar off its edge when scrolled away
     private func applyScrolledAway() {
-        guard let container = tabController?.view else { return }
+        guard let container, let bar = tabController?.tabBar, let view = bridge?.viewController?.view else { return }
         guard scrolledAway else {
             container.transform = .identity
             return
         }
+        // The vertical bar sits in the column the system reserves as safe area
         switch placement {
-        case .leading: container.transform = CGAffineTransform(translationX: -container.bounds.width, y: 0)
-        case .trailing: container.transform = CGAffineTransform(translationX: container.bounds.width, y: 0)
-        default: container.transform = CGAffineTransform(translationX: 0, y: container.bounds.height)
+        case .leading: container.transform = CGAffineTransform(translationX: -view.safeAreaInsets.left, y: 0)
+        case .trailing: container.transform = CGAffineTransform(translationX: view.safeAreaInsets.right, y: 0)
+        default: container.transform = CGAffineTransform(translationX: 0, y: bar.frame.height)
         }
     }
 
@@ -411,5 +393,14 @@ public class NativeTabBarPlugin: CAPPlugin, CAPBridgedPlugin, UITabBarController
             blue: CGFloat(value & 0xFF) / 255,
             alpha: 1
         )
+    }
+}
+
+/// Lets touches through to the web view, except on the bar: the tab bar controller's
+/// containers fill the screen, so only hits on smaller views (the bar and its buttons) are kept
+private final class PassthroughView: UIView {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard let hit = super.hitTest(point, with: event) else { return nil }
+        return hit.convert(hit.bounds, to: self).size == bounds.size ? nil : hit
     }
 }
